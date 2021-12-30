@@ -1,0 +1,27 @@
+{
+    "manifest_version": 2,
+    "name": "TornMoneyMaker",
+    "version": "1.0",
+    "description": "Amazing extension.",
+    "author": "Rick",
+    "permissions": [
+      "storage",
+      "webRequest",
+      "https://www.torn.com/*",
+      "https://api.torn.com/*"
+    ],
+
+    "background": {
+      "scripts": ["background/background.js"]
+    },
+
+    "content_scripts": [
+      {
+        "matches": ["https://www.torn.com/imarket.php*"],
+        "js": ["content/highlight.js"],
+        "css": ["content/highlight.css"],
+        "run_at": "document_end"
+      }
+    ]
+  }
+  
