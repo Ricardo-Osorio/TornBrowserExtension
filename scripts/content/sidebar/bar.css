@@ -1,0 +1,55 @@
+.sidebar-fixed {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    background: #f1f1f1;
+    width: 45px;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px 0 0 10px;
+}
+
+.tmm-img {
+    width: 100%;
+    transition: transform .1s ease;
+}
+
+.tmm-img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip on the left side */
+    position: absolute;
+    z-index: 1;
+    right: 105%;
+}
+
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 100%; /* Add the arrow to the rigth side of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent black;
+  }

@@ -1,10 +1,10 @@
-function listener(details) {
+function marketListener(details) {
     browser.tabs.executeScript({
-        file: "/content/highlight.js"
+        file: "/scripts/content/market/highlight.js"
     })
 }
 
 browser.webRequest.onCompleted.addListener(
-    listener,
+    marketListener,
     {urls: ["https://www.torn.com/imarket.php?rfcv=*"]}
 )

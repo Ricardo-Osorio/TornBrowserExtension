@@ -1,0 +1,12 @@
+.tmm-highlight {
+    background: aquamarine;
+}
+
+.positive {
+	color: green;
+}
+
+.tmm-flex-with-space {
+	display: flex;
+	justify-content: space-between;
+}

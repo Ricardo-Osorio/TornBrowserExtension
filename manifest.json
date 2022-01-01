@@ -3,7 +3,7 @@
     "name": "TornMoneyMaker",
     "version": "1.0",
     "description": "Amazing extension.",
-    "author": "Rick",
+    "author": "Ricardo",
     "permissions": [
       "storage",
       "webRequest",
@@ -12,16 +12,38 @@
     ],
 
     "background": {
-      "scripts": ["background/background.js"]
+      "scripts": ["scripts/background/background.js"]
     },
 
     "content_scripts": [
       {
         "matches": ["https://www.torn.com/imarket.php*"],
-        "js": ["content/highlight.js"],
-        "css": ["content/highlight.css"],
+        "js": ["scripts/content/market/highlight.js"],
+        "css": ["scripts/content/market/highlight.css"],
+        "run_at": "document_end"
+      },
+      {
+        "matches": ["https://www.torn.com/bazaar.php?userId=*"],
+        "js": ["scripts/content/bazaar/highlight.js"],
+        "css": ["scripts/content/bazaar/highlight.css"],
+        "run_at": "document_end"
+      },
+      {
+        "matches": [
+          "https://www.torn.com/shops.php?step=*",
+          "https://www.torn.com/imarket.php*",
+          "https://www.torn.com/bazaar.php?userId=*",
+          "https://www.torn.com/bigalgunshop.php",
+          "https://www.torn.com/shops.php?step=candy"
+        ],
+        "js": ["scripts/content/sidebar/bar.js"],
+        "css": ["scripts/content/sidebar/bar.css"],
         "run_at": "document_end"
       }
+    ],
+
+    "web_accessible_resources": [
+      "resources/*"
     ]
   }
   
