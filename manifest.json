@@ -18,14 +18,20 @@
     "content_scripts": [
       {
         "matches": ["https://www.torn.com/imarket.php*"],
-        "js": ["scripts/content/market/highlight.js"],
         "css": ["scripts/content/market/highlight.css"],
+        "js": [
+          "scripts/content/common/common.js",
+          "scripts/content/market/highlight.js"
+        ],
         "run_at": "document_end"
       },
       {
         "matches": ["https://www.torn.com/bazaar.php?userId=*"],
-        "js": ["scripts/content/bazaar/highlight.js"],
         "css": ["scripts/content/bazaar/highlight.css"],
+        "js": [
+          "scripts/content/common/common.js",
+          "scripts/content/bazaar/highlight.js"
+        ],
         "run_at": "document_end"
       },
       {

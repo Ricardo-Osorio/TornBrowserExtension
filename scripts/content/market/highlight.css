@@ -1,4 +1,21 @@
-.tmm-highlight {
-	background-color: aquamarine !important;
+.tmm-title-adjust {
 	margin-left: 0 !important;
+	line-height: 17px !important;
+}
+
+.tmm-wrapper {
+	margin-left: 0 !important;
+}
+
+.tmm-resell-highlight {
+	background: #8be860;
+	border-radius: 8px;
+	display: inline-block;
+	margin: auto;
+}
+
+.tmm-resell-text {
+	padding: 3px 9px 0 10px;
+	font-size: 17px;
+	font-family: initial;
 }

@@ -4,6 +4,7 @@ function marketListener(details) {
     })
 }
 
+// switching between 
 browser.webRequest.onCompleted.addListener(
     marketListener,
     {urls: ["https://www.torn.com/imarket.php?rfcv=*"]}
