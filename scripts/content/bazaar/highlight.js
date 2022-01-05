@@ -22,31 +22,39 @@ async function listenForNewRows() {
     }
 
     var list = document.querySelector(".ReactVirtualized__Grid__innerScrollContainer")
-    var config = { childList: true }
+    var config = { childList: true, subtree: true }
     var observer = new MutationObserver(callback)
     observer.observe(list, config)
     
     function callback(mutationsList) {
         for(const mutation of mutationsList) {
-            // rows are loaded as needed (scroll down the page) thus
-            // need to be handled differently than processing the entire page
-            mutation.addedNodes.forEach(function(newRow){
-                handleNewRowLoaded(pricesTable, newRow)
-            })
+            if (mutation.removedNodes.length === 1 && mutation.removedNodes[0].classList.contains("item___CAjnz")) {
+                // console.log("[TMM] item removed, updating highlights")
+
+                // processes all items in the page
+                showHighlight()
+            } else if (mutation.addedNodes.length == 1 && mutation.addedNodes[0].classList.contains("row___nCKu7")) {
+                // console.log("[TMM] handling new row of items")
+
+                // rows are loaded as needed (scroll down the page) thus
+                // need to be handled differently than processing the entire page.
+                // doing so also reduces the amount of work that has to be done
+                handleNewRowLoaded(pricesTable, mutation.addedNodes[0])
+            }
         }
     }
 }
 
 async function handleNewRowLoaded(pricesTable, newRow) {
     for (var item of newRow.querySelectorAll(":scope > div .item___CAjnz.item___ZYlyz")) {
-        // var name = item.querySelector(":scope > div .imgBar___RwG9v").getAttribute("aria-label")
-        // console.log(`[TMM] processing item ${name}`)
-        
         var itemID = item.querySelector(":scope > div img").getAttribute("src") // "/images/items/378/large.png?v=1555232..."
         itemID = itemID.match(/\d+/)[0]
 
         var currentPrice = item.querySelector(":scope > div p ~ p").lastChild.data
         currentPrice = Number(currentPrice.replaceAll(',',''))
+
+        var name = item.querySelector(":scope > div .imgBar___RwG9v").getAttribute("aria-label")
+        console.log(`[TMM] processing item ${name} selling for ${currentPrice}`)
 
         // item fetched from Torn API
         var apiItem = pricesTable.get(itemID)
@@ -119,5 +127,5 @@ async function showHighlight() {
         }
     }
 
-    // console.log("[TMM] done")
+    console.log("[TMM] done")
 }

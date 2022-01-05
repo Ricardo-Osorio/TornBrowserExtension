@@ -18,13 +18,9 @@ async function listenForCategoryChanges() {
 async function showHighlight() {
     // console.log("[TMM] highlight script started")
 
-    // avoiding running the script multiple times when unnecessary. Opening the
-    // prices of an item will make a XMLHttpRequest which will then trigger this
-    // function. Changing the categories also triggers this but without a reload
-    // of the page. All this makes it a bit tricky to handle due to the suggested
-    // way of handing this kind of problem (window.hasRun for example) not being
-    // viable
-    var earlyExit = document.querySelector("[aria-expanded='true'] > * .tmm-highlight")
+    // Can return early if the current page has already been highlighted.
+    // This helps prevent multiple dom updates when pressing the refresh button.
+    var earlyExit = document.querySelector("[aria-expanded='true'] > * .tmm-title-adjust")
     if (earlyExit) {
         console.log("[TMM] return early")
         return
@@ -53,7 +49,7 @@ async function showHighlight() {
         var nameAndCurrentPrice = item.children[0].getAttribute("aria-label").split(": $")
         var currentPrice = parseInt(nameAndCurrentPrice[1].replaceAll(',',''))
 
-        // var name = nameAndCurrentPrice[0]
+        // var itemName = nameAndCurrentPrice[0]
 
         // early return if page already has highlights
         var titleElement = item.querySelector(":scope > .title")
