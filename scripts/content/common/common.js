@@ -1,16 +1,19 @@
 "use strict"
 
+const minProfit = 50
+const minPercentage = 25
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function requireElement(selector) {
     var attempt = 0
-    while (attempt < 20) { // max 4 sec
+    while (attempt < 20) { // max 5 sec
         var element = document.querySelector(selector)
         if (element) return
 
-        console.log("[TMM] waiting for dom element to be present (250ms)")
+        // console.log("[TMM] waiting for dom element to be present (250ms)")
         await sleep(250)
         attempt++
     }
@@ -19,11 +22,11 @@ async function requireElement(selector) {
 
 async function requireNotElement(selector) {
     var attempt = 0
-    while (attempt < 20) { // max 4 sec
+    while (attempt < 20) { // max 5 sec
         var element = document.querySelector(selector)
         if (!element) return
 
-        console.log("[TMM] waiting for dom element to not be present (250ms)")
+        // console.log("[TMM] waiting for dom element to not be present (250ms)")
         await sleep(250)
         attempt++
     }

@@ -3,17 +3,13 @@
     "name": "TornMoneyMaker",
     "version": "1.0",
     "description": "Amazing extension.",
-    "author": "Ricardo",
+    "author": "Rick",
     "permissions": [
       "storage",
       "webRequest",
       "https://www.torn.com/*",
       "https://api.torn.com/*"
     ],
-
-    "background": {
-      "scripts": ["scripts/background/background.js"]
-    },
 
     "content_scripts": [
       {

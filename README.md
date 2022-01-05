@@ -1,5 +1,4 @@
 Bugs:
-    - Fix the multiple calls to the market script (from the background one) - if possible
     - On a bazaar, filtering by a keyword will show a list of items where none have the highlight. Removing the filter will then show the entire list again which now includes the highlights.
     - Bazaar ordering buttons won't cause the script to trigger (still happening)
     - From the market, opening an item to buy, buying all cheap items from that list and then closing it will not trigger an update (XMLHttpRequest are being blocked so these are blocked as well?) - see if there's any difference to them since one is probably a POST and the other a GET

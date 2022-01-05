@@ -1,6 +1,19 @@
 "use strict";
 
 showHighlight()
+listenForCategoryChanges()
+
+// categories (from the market left side panel) where discount percentages will be shown
+const categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
+
+async function listenForCategoryChanges() {
+    await requireElement(".market-tabs")
+    document.querySelector(".market-tabs").addEventListener("click", async function() {
+        await requireElement(".pagination-wrap")
+        await requireNotElement(".pagination-wrap")
+        showHighlight()
+    })
+}
 
 async function showHighlight() {
     // console.log("[TMM] highlight script started")
@@ -34,8 +47,6 @@ async function showHighlight() {
 
     var category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-cat")
 
-    // var totalProfit = 0
-
     for (var item of document.querySelectorAll(".item-market-wrap div[aria-expanded='true'] li[data-item]")) {
         var itemID = item.children[0].getAttribute("itemid")
         
@@ -47,7 +58,7 @@ async function showHighlight() {
         // early return if page already has highlights
         var titleElement = item.querySelector(":scope > .title")
         if (titleElement.classList.contains("tmm-title-adjust")) {
-            // console.log("[TMM] update of elements deemed not necessary")
+            console.log("[TMM] update of elements deemed not necessary")
             return
         }
 
@@ -74,14 +85,14 @@ async function showHighlight() {
         }
     }
 
-    // console.log("[TMM] done")
+    console.log("[TMM] done")
 }
 
 function handleProfit(sellingPrice, currentPrice) {
     if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
     var profit = sellingPrice - currentPrice
-    if (profit < 50) return
+    if (profit < minProfit) return
 
     var outerDiv = document.createElement("div")
     outerDiv.classList.add("tmm-resell-highlight")
@@ -96,10 +107,10 @@ function handleProfit(sellingPrice, currentPrice) {
 function handleDiscount(marketPrice, currentPrice, category) {
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
-    if (!CategoriesWithDiscounts.includes(category)) return
+    if (!categoriesWithDiscounts.includes(category)) return
     
     var discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
-    if (discountPercentage < 25) return
+    if (discountPercentage < minPercentage) return
 
     var outerDiv = document.createElement("div")
     outerDiv.classList.add("tmm-resell-highlight")
@@ -110,6 +121,3 @@ function handleDiscount(marketPrice, currentPrice, category) {
 
     return outerDiv
 }
-
-// categories (from the market left side panel) where discounts are shown
-var CategoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]

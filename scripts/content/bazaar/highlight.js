@@ -1,8 +1,5 @@
 "use strict"
 
-// Good bazaar for testing due to being stable with many items
-// https://www.torn.com/bazaar.php?userId=322162
-
 showHighlight()
 listenForNewRows()
 
@@ -56,7 +53,7 @@ async function handleNewRowLoaded(pricesTable, newRow) {
         var sellingPrice = apiItem.price
         if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
-        if (sellingPrice - currentPrice > 50) {
+        if (sellingPrice - currentPrice > minProfit) {
             item.classList.add("tmm-highlight")
 
             var priceElement = item.querySelector(":scope > div .price___zTGNJ")
@@ -103,7 +100,7 @@ async function showHighlight() {
         var sellingPrice = apiItem.price
         if (!sellingPrice) continue // a few items don't have one, I.G. "Pillow"
 
-        if (sellingPrice - currentPrice > 50) {
+        if (sellingPrice - currentPrice > minProfit) {
             if (item.classList.contains("tmm-highlight")) {
                 console.log("[TMM] update of element deemed not necessary")
                 continue
