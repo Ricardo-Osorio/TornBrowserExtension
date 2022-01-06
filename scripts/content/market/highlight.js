@@ -1,19 +1,9 @@
 "use strict";
 
-showHighlight()
-listenForCategoryChanges()
-
 // categories (from the market left side panel) where discount percentages will be shown
-const categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
+var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
 
-async function listenForCategoryChanges() {
-    await requireElement(".market-tabs")
-    document.querySelector(".market-tabs").addEventListener("click", async function() {
-        await requireElement(".pagination-wrap")
-        await requireNotElement(".pagination-wrap")
-        showHighlight()
-    })
-}
+showHighlight()
 
 async function showHighlight() {
     // console.log("[TMM] highlight script started")

@@ -11,6 +11,10 @@
       "https://api.torn.com/*"
     ],
 
+    "background": {
+      "scripts": ["scripts/background/background.js"]
+    },
+
     "content_scripts": [
       {
         "matches": ["https://www.torn.com/imarket.php*"],
