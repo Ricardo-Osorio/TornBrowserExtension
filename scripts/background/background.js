@@ -7,8 +7,7 @@ browser.webRequest.onCompleted.addListener(
     {urls: ["https://www.torn.com/imarket.php?rfcv=*"]}
 )
 
-function marketListener(details) {
-    console.log(details)
+function marketListener() {
     browser.tabs.executeScript({
         file: "/scripts/content/market/highlight.js"
     })

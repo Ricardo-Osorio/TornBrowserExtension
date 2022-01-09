@@ -13,20 +13,26 @@ const bar = document.createElement("div")
 bar.classList.add("sidebar-fixed")
 
 // refresh button
+// the content script that defines the "showHighlight" are only loaded
+// with the bazarr and market
 if (typeof showHighlight !== 'undefined') {
     var button = document.createElement("button")
     button.classList.add("tooltip")
-    button.onclick = showHighlight // could do with a forced option?
+    button.onclick = async function() {
+        refreshIcon.classList.add("tmm-spinner")
+        await showHighlight() // could do with a forced option?
+        refreshIcon.classList.remove("tmm-spinner")
+    }
     
     var tooltip = document.createElement("span")
     tooltip.classList.add("tooltiptext")
     tooltip.appendChild(document.createTextNode("Refresh highlights"))
     button.appendChild(tooltip)
 
-    var icon = document.createElement("img");
-    icon.setAttribute("src", getIconURL("refresh"))
-    icon.classList.add("tmm-img")
-    button.appendChild(icon)
+    var refreshIcon = document.createElement("img");
+    refreshIcon.setAttribute("src", getIconURL("refresh"))
+    refreshIcon.classList.add("tmm-img")
+    button.appendChild(refreshIcon)
 
     bar.appendChild(button)
 }

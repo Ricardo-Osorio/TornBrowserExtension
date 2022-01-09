@@ -51,5 +51,4 @@
     "web_accessible_resources": [
       "resources/*"
     ]
-  }
-  
+}
