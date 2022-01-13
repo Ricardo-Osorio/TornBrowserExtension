@@ -1,6 +1,6 @@
 // listen to request to the URL below. These are made when:
 // - the market page is first loaded
-// - each market category is loaded (why two requests are always made loading the market page)
+// - each market category is loaded (why two requests are always made loading the market page the first time)
 // - fetching an item price's data (when pressing an item and more information is shown)
 browser.webRequest.onCompleted.addListener(
     marketListener,

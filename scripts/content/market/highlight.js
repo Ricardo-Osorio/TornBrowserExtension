@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 // categories (from the market left side panel) where discount percentages will be shown
 var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
@@ -16,35 +16,24 @@ async function showHighlight() {
         return
     }
 
-    var pricesTable = await recoverPricesTableFromStorage()
-    if (typeof pricesTable.map === 'undefined') {
-        pricesTable = await fetchItemsFromAPI()
-        if (!pricesTable) {
-            console.log("[TMM] failed to fetch items, aborting")
-            return
-        }
-        storePricesTable(pricesTable)
-    } else {
-        // console.log("[TMM] loaded from storage")
-        pricesTable = pricesTable.map
-    }
+    var pricesTable = await getPricesTable()
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]")
 
     var category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-cat")
 
     for (var item of document.querySelectorAll(".item-market-wrap div[aria-expanded='true'] li[data-item]")) {
-        var itemID = item.children[0].getAttribute("itemid")
+        const itemID = item.children[0].getAttribute("itemid")
         
         var nameAndCurrentPrice = item.children[0].getAttribute("aria-label").split(": $")
-        var currentPrice = parseInt(nameAndCurrentPrice[1].replaceAll(',',''))
+        const currentPrice = parseInt(nameAndCurrentPrice[1].replaceAll(',',''))
 
         // var itemName = nameAndCurrentPrice[0]
 
         // early return if page already has highlights
         var titleElement = item.querySelector(":scope > .title")
         if (titleElement.classList.contains("tmm-title-adjust")) {
-            console.log("[TMM] update of elements deemed not necessary")
+            console.log("[TMM] return early")
             return
         }
 
@@ -74,6 +63,7 @@ async function showHighlight() {
     console.log("[TMM] done")
 }
 
+// Decide if profit is within desired margin and build the node if needed.
 function handleProfit(sellingPrice, currentPrice) {
     if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
@@ -90,6 +80,8 @@ function handleProfit(sellingPrice, currentPrice) {
     return outerDiv
 }
 
+// Decide if discount is within desired margin and build the node if needed.
+// Filters out categories not present in the `category` array.
 function handleDiscount(marketPrice, currentPrice, category) {
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
