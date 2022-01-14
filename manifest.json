@@ -12,17 +12,20 @@
     ],
 
     "background": {
-      "scripts": ["scripts/background/background.js"]
+      "scripts": [
+        "scripts/content/common/common.js", 
+        "scripts/background/background.js"
+      ]
     },
 
     "content_scripts": [
       {
         "matches": ["https://www.torn.com/imarket.php*"],
-        "css": ["scripts/content/market/highlight.css"],
         "js": [
           "scripts/content/common/common.js",
           "scripts/content/market/highlight.js"
         ],
+        "css": ["scripts/content/market/highlight.css"],
         "run_at": "document_end"
       },
       {
@@ -39,8 +42,7 @@
           "https://www.torn.com/shops.php?step=*",
           "https://www.torn.com/imarket.php*",
           "https://www.torn.com/bazaar.php?userId=*",
-          "https://www.torn.com/bigalgunshop.php",
-          "https://www.torn.com/shops.php?step=candy"
+          "https://www.torn.com/bigalgunshop.php"
         ],
         "js": ["scripts/content/sidebar/bar.js"],
         "css": ["scripts/content/sidebar/bar.css"],

@@ -4,7 +4,7 @@ showHighlight()
 listenForChanges()
 
 async function showHighlight() {
-    // console.log("[TMM] highlight script started")
+    console.log("[TMM] bazaar highlight script started")
 
     var pricesTable = await getPricesTable()
 
@@ -25,9 +25,6 @@ async function showHighlight() {
         var apiItem = pricesTable.get(itemID)
         var sellingPrice = apiItem.price
         if (!sellingPrice) continue // a few items don't have one, I.G. "Pillow"
-
-        console.log("[TMM] current selling price from API")
-        console.log(sellingPrice)
 
         // profit not within desired margin
         if (sellingPrice - currentPrice < minProfit) continue

@@ -6,7 +6,12 @@ var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drink
 showHighlight()
 
 async function showHighlight() {
-    // console.log("[TMM] highlight script started")
+    if (regexMarketListings.test(location.href)) {
+        console.log("[TMM] market script matched listings page URL, aborting")
+        return
+    }
+    
+    console.log("[TMM] market highlight script started")
 
     // Can return early if the current page has already been highlighted.
     // This helps prevent multiple dom updates when pressing the refresh button.
