@@ -10,7 +10,7 @@ async function showHighlight() {
 
     // bazaars consist of a dynamic list that loads new items as needed (scroll)
     // wait for that list to be present
-    await requireElement(".ReactVirtualized__Grid__innerScrollContainer")
+    await requireElement(".ReactVirtualized__Grid__innerScrollContainer", 20) // 5s
 
     for (var item of document.querySelectorAll(".item___CAjnz.item___ZYlyz")) {
         var itemID = item.querySelector(":scope > div img").getAttribute("src") // "/images/items/378/large.png?v=1555232..."
@@ -53,7 +53,7 @@ async function showHighlight() {
 
 async function listenForChanges() {
     // wait for the dynamic list that will then load the items
-    await requireElement(".ReactVirtualized__Grid__innerScrollContainer")
+    await requireElement(".ReactVirtualized__Grid__innerScrollContainer", 20) // 5s
 
     var pricesTable = await getPricesTable()
 

@@ -1,10 +1,17 @@
 "use strict"
 
+// Minimum amount of profit necessary to show the highlight and value you would
+// get from buying and then reselling that item
 const minProfit = 150
+// Minimum percentage necessary to show the discount element over an item
 const minPercentage = 25
-const maxStorageExpense = 400
+// Maximum amount you're willing to overpay for an item when doing so with the
+// goal of storing money away
+const maxPiggyBankExpense = 400
+// Minimum value of an item necessary to consider showing the piggy bank icon
+const minPiggyBankValue = 20000
 
-const regexMarketListings = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
+const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
 
 // In-memory mapping of all items and their selling and market prices.
@@ -17,15 +24,15 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// builds the URL to fetch the icons. supports as input:
-// candy, car, market, refresh, rifle and tools
+// Builds the URL to fetch the icons. Supports as input:
+// candy, car, market, refresh, rifle, tools and piggy-bank
 function getIconURL(name) {
     return browser.extension.getURL("resources/icons/"+name+"-icon.png");  
 }
 
-async function requireElement(selector) {
+async function requireElement(selector, maxRetries) {
     var attempt = 0
-    while (attempt < 20) { // max 5 sec
+    while (attempt < maxRetries) { // 20 attempts = 5 sec
         var element = document.querySelector(selector)
         if (element) return
 
@@ -34,19 +41,6 @@ async function requireElement(selector) {
         attempt++
     }
     console.log("[TMM] waiting for dom element to be present has failed all attempts (5s)")
-}
-
-async function requireElementFast(selector) {
-    var attempt = 0
-    while (attempt < 3) { // max 0.75 sec
-        var element = document.querySelector(selector)
-        if (element) return
-
-        // console.log("[TMM] waiting for dom element to be present (750ms)")
-        await sleep(250)
-        attempt++
-    }
-    console.log("[TMM] waiting for dom element to be present has failed all attempts (1s)")
 }
 
 async function requireNotElement(selector) {

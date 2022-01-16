@@ -6,7 +6,7 @@ var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drink
 showHighlight()
 
 async function showHighlight() {
-    if (regexMarketListings.test(location.href)) {
+    if (regexListingsPage.test(location.href)) {
         console.log("[TMM] market script matched listings page URL, aborting")
         return
     }
@@ -26,7 +26,7 @@ async function showHighlight() {
 
     var pricesTable = await getPricesTable()
 
-    await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]")
+    await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 
     var category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-cat")
 
@@ -63,7 +63,7 @@ async function showHighlight() {
             wrapper.appendChild(discountElement)
         }
 
-        var piggyBankElement = handleBank(apiItem.price, currentPrice)
+        var piggyBankElement = handlePiggyBank(apiItem.price, currentPrice)
         if (piggyBankElement && !profitElement) {
             var wrapper = item.querySelector(":scope .qty-wrap")
             wrapper.appendChild(piggyBankElement)
@@ -119,17 +119,12 @@ function handleDiscount(marketPrice, currentPrice, category) {
 }
 
 // Decide if profit is within desired margin and build the node if needed.
-function handleBank(sellingPrice, currentPrice) {
+function handlePiggyBank(sellingPrice, currentPrice) {
     if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
-    // skip items with selling price too low
-    //
-    // I.G. "Bunch of Flowers" have a selling price of $3 and market price of ~$160.
-    // If the user sets maxStorageExpense to 100 it would still show the piggy bank icon
-    // even though it doesn't actually provide any reselling value (to NPC shops that is)
-    if (sellingPrice < 100) return
+    if (sellingPrice < minPiggyBankValue) return
 
-    if (Math.abs(sellingPrice - currentPrice) > maxStorageExpense) {
+    if (Math.abs(sellingPrice - currentPrice) > maxPiggyBankExpense) {
         console.log("TMM update not done?")
         return
     }

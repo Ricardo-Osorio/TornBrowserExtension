@@ -6,10 +6,9 @@ async function handleRequest() {
     var unlock = await listingsScriptMutex.lock()
     console.log("[TMM] listings script started")
 
-    await requireElementFast("#display-request-state")
+    await requireElement("#display-request-state", 3) // 0.75s
     var priceChangeNode = document.querySelector("#display-request-state")
     if (!priceChangeNode) {
-        console.log("[TMM] price change alert not found")
         unlock()
         return
     }
@@ -59,7 +58,7 @@ async function handleRequest() {
 
 async function retryRemove() {
     for (let i = 0; i < 3; i++) {
-        await requireElementFast("#display-request-state")
+        await requireElement("#display-request-state", 3) // 0.75s
         var priceChangeNode = document.querySelector("#display-request-state")
         if (!priceChangeNode) return
         priceChangeNode.remove()
