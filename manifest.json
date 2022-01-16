@@ -44,7 +44,10 @@
           "https://www.torn.com/bazaar.php?userId=*",
           "https://www.torn.com/bigalgunshop.php"
         ],
-        "js": ["scripts/content/sidebar/bar.js"],
+        "js": [
+          "scripts/content/sidebar/bar.js",
+          "scripts/content/common/common.js"
+        ],
         "css": ["scripts/content/sidebar/bar.css"],
         "run_at": "document_end"
       }

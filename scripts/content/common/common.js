@@ -1,7 +1,8 @@
 "use strict"
 
-const minProfit = 50
+const minProfit = 150
 const minPercentage = 25
+const maxStorageExpense = 400
 
 const regexMarketListings = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
@@ -14,6 +15,12 @@ var pricesTable
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// builds the URL to fetch the icons. supports as input:
+// candy, car, market, refresh, rifle and tools
+function getIconURL(name) {
+    return browser.extension.getURL("resources/icons/"+name+"-icon.png");  
 }
 
 async function requireElement(selector) {
@@ -123,6 +130,7 @@ function Mutex() {
     }
 }
 
-// ensures the script runs one at a time. The background script fires it
-// multiple times so at least that can be handled
+// ensures the script runs one at a time. The background script can fire
+// multiple simulataneos instances of the content scripts
 const listingsScriptMutex = new Mutex();
+const marketScriptMutex = new Mutex();

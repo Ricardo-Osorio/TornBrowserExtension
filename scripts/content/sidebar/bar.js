@@ -1,11 +1,5 @@
 "use strict"
 
-// builds the URL to fetch the icons. supports as input:
-// candy, car, market, refresh, rifle and tools
-function getIconURL(name) {
-    return browser.extension.getURL("resources/icons/"+name+"-icon.png");  
-}
-
 var body = document.querySelector("#body")
 
 // sidebar div

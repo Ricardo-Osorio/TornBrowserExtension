@@ -10,6 +10,8 @@ async function showHighlight() {
         console.log("[TMM] market script matched listings page URL, aborting")
         return
     }
+
+    var unlock = await marketScriptMutex.lock()
     
     console.log("[TMM] market highlight script started")
 
@@ -18,6 +20,7 @@ async function showHighlight() {
     var earlyExit = document.querySelector("[aria-expanded='true'] > * .tmm-title-adjust")
     if (earlyExit) {
         console.log("[TMM] return early")
+        unlock()
         return
     }
 
@@ -39,6 +42,7 @@ async function showHighlight() {
         var titleElement = item.querySelector(":scope > .title")
         if (titleElement.classList.contains("tmm-title-adjust")) {
             console.log("[TMM] return early")
+            unlock()
             return
         }
 
@@ -55,7 +59,14 @@ async function showHighlight() {
 
         var discountElement = handleDiscount(apiItem.marketPrice, currentPrice, category)
         if (discountElement) {
-            wrapperElement.appendChild(discountElement)
+            var wrapper = item.querySelector(":scope .qty-wrap")
+            wrapper.appendChild(discountElement)
+        }
+
+        var piggyBankElement = handleBank(apiItem.price, currentPrice)
+        if (piggyBankElement && !profitElement) {
+            var wrapper = item.querySelector(":scope .qty-wrap")
+            wrapper.appendChild(piggyBankElement)
         }
 
         // update DOM if necessary
@@ -66,6 +77,7 @@ async function showHighlight() {
     }
 
     console.log("[TMM] done")
+    unlock()
 }
 
 // Decide if profit is within desired margin and build the node if needed.
@@ -95,12 +107,36 @@ function handleDiscount(marketPrice, currentPrice, category) {
     var discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
     if (discountPercentage < minPercentage) return
 
-    var outerDiv = document.createElement("div")
-    outerDiv.classList.add("tmm-resell-highlight")
+    var outerDiv = document.createElement("div");
+    outerDiv.style.backgroundImage = "url("+getIconURL("sale")+")"
+    outerDiv.classList.add("tmm-sale")
     var innerText = document.createElement("span")
-    innerText.classList.add("tmm-resell-text")
+    innerText.classList.add("tmm-discount-text")
     innerText.appendChild(document.createTextNode(`${discountPercentage}%`))
     outerDiv.appendChild(innerText)
 
     return outerDiv
+}
+
+// Decide if profit is within desired margin and build the node if needed.
+function handleBank(sellingPrice, currentPrice) {
+    if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
+
+    // skip items with selling price too low
+    //
+    // I.G. "Bunch of Flowers" have a selling price of $3 and market price of ~$160.
+    // If the user sets maxStorageExpense to 100 it would still show the piggy bank icon
+    // even though it doesn't actually provide any reselling value (to NPC shops that is)
+    if (sellingPrice < 100) return
+
+    if (Math.abs(sellingPrice - currentPrice) > maxStorageExpense) {
+        console.log("TMM update not done?")
+        return
+    }
+
+    var icon = document.createElement("img");
+    icon.setAttribute("src", getIconURL("piggy-bank"))
+    icon.classList.add("tmm-piggy-bank")
+
+    return icon
 }
