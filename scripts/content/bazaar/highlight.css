@@ -10,3 +10,19 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+.tmm-discount {
+	background-size: contain;
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: -12px;
+	right: -6px;
+	text-align: center;
+}
+
+.tmm-discount-text {
+	font-size: 14px;
+	color: white;
+	line-height: 40px;
+}

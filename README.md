@@ -3,6 +3,8 @@ Bugs:
     - On a bazaar, pressing the "buy" on an item that is highlighted but then aborting and closing that small "buy" window will restore the object to the original form without a price (profile element)
     - On the listings page, when the user adds a new item it also triggers the script?
     - Bazaar items with the price set to $1 and that are locked (only sellable to one person?) still show the highlight on them
+    - On the market even after buying an item a low price and closing the window, it still shows the "sale" and "profit elements. If possible it would be nice if these could be removed.
+    - Bazaar discounts are shown for every category since categories are not available there. However if I store those within the apiItem objects I may be able to still follow that rule.
 
 Features:
     - Menu that stays over other elements in the page with options:

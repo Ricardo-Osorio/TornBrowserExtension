@@ -55,6 +55,8 @@ async function showHighlight() {
         var profitElement = handleProfit(apiItem.price, currentPrice)
         if (profitElement) {
             wrapperElement.appendChild(profitElement)
+            titleElement.classList.add("tmm-title-adjust")
+            titleElement.appendChild(wrapperElement)
         }
 
         var discountElement = handleDiscount(apiItem.marketPrice, currentPrice, category)
@@ -67,12 +69,6 @@ async function showHighlight() {
         if (piggyBankElement && !profitElement) {
             var wrapper = item.querySelector(":scope .qty-wrap")
             wrapper.appendChild(piggyBankElement)
-        }
-
-        // update DOM if necessary
-        if (profitElement || discountElement) {
-            titleElement.classList.add("tmm-title-adjust")
-            titleElement.appendChild(wrapperElement)
         }
     }
 
@@ -109,7 +105,7 @@ function handleDiscount(marketPrice, currentPrice, category) {
 
     var outerDiv = document.createElement("div");
     outerDiv.style.backgroundImage = "url("+getIconURL("sale")+")"
-    outerDiv.classList.add("tmm-sale")
+    outerDiv.classList.add("tmm-discount")
     var innerText = document.createElement("span")
     innerText.classList.add("tmm-discount-text")
     innerText.appendChild(document.createTextNode(`${discountPercentage}%`))

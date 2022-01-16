@@ -8,8 +8,8 @@ async function showHighlight() {
 
     var pricesTable = await getPricesTable()
 
-    // bazaars consist of a dynamic list that loads new items as needed (scroll)
-    // wait for that list to be present
+    // bazaars consist of a dynamic list that loads new items as needed (scroll).
+    // wait for that list to be present.
     await requireElement(".ReactVirtualized__Grid__innerScrollContainer", 20) // 5s
 
     for (var item of document.querySelectorAll(".item___CAjnz.item___ZYlyz")) {
@@ -26,29 +26,74 @@ async function showHighlight() {
         var sellingPrice = apiItem.price
         if (!sellingPrice) continue // a few items don't have one, I.G. "Pillow"
 
-        // profit not within desired margin
-        if (sellingPrice - currentPrice < minProfit) continue
-
         // the class "tmm-highlight" is also used here as a controling flag
         // to detect whether an item has already been updated
         if (item.classList.contains("tmm-highlight")) {
             console.log("[TMM] update of element deemed not necessary")
             continue
         }
-        item.classList.add("tmm-highlight")
-        
-        var priceElement = item.querySelector(":scope > div .price___zTGNJ")
-        priceElement.classList.add("tmm-flex-with-space")
 
-        // create a profit element
-        const profitElement = document.createElement("span")
-        profitElement.classList.add("positive")
-        profitElement.appendChild(document.createTextNode(`+ $${sellingPrice - currentPrice}`))
+        var profitElement = handleProfit(apiItem.price, currentPrice)
+        if (profitElement) {
+            item.classList.add("tmm-highlight")
 
-        priceElement.appendChild(profitElement)
+            var priceElement = item.querySelector(":scope > div .price___zTGNJ")
+            priceElement.classList.add("tmm-flex-with-space")
+            priceElement.appendChild(profitElement)
+        }
+
+        var discountElement = handleDiscount(apiItem.marketPrice, currentPrice, "category")
+        if (discountElement) {
+            var wrapper = item.querySelector(":scope .imgContainer___xJNhu")
+            wrapper.appendChild(discountElement)
+        }
     }
 
     console.log("[TMM] done")
+}
+
+// Decide if profit is within desired margin and build the node if needed.
+function handleProfit(sellingPrice, currentPrice) {
+    if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
+
+    var profit = sellingPrice - currentPrice
+    if (profit < minProfit) return
+
+    // var outerDiv = document.createElement("div")
+    // outerDiv.classList.add("tmm-resell-highlight")
+    // var innerText = document.createElement("span")
+    // innerText.classList.add("tmm-resell-text")
+    // innerText.appendChild(document.createTextNode(`$${profit.toLocaleString("en-US")}`))
+    // outerDiv.appendChild(innerText)
+
+    const profitElement = document.createElement("span")
+    profitElement.classList.add("positive")
+    profitElement.appendChild(document.createTextNode(`+ $${sellingPrice - currentPrice}`))
+
+    return profitElement
+}
+
+// Decide if discount is within desired margin and build the node if needed.
+// Filters out categories not present in the `category` array.
+function handleDiscount(marketPrice, currentPrice, category) {
+    if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
+
+    // if (!categoriesWithDiscounts.includes(category)) return
+    
+    var discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
+    if (discountPercentage < minPercentage) return
+
+    console.log("test")
+
+    var outerDiv = document.createElement("div");
+    outerDiv.style.backgroundImage = "url("+getIconURL("sale")+")"
+    outerDiv.classList.add("tmm-discount")
+    var innerText = document.createElement("span")
+    innerText.classList.add("tmm-discount-text")
+    innerText.appendChild(document.createTextNode(`${discountPercentage}%`))
+    outerDiv.appendChild(innerText)
+
+    return outerDiv
 }
 
 async function listenForChanges() {
