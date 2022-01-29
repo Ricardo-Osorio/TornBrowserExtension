@@ -2,14 +2,16 @@
 
 // Minimum amount of profit necessary to show the highlight and value you would
 // get from buying and then reselling that item
-const minProfit = 150
+const defaultMinProfit = 450
+// TODO
+const defaultMinProfitResell = 200
 // Minimum percentage necessary to show the discount element over an item
-const minPercentage = 25
+const defaultMinPercentage = 25
+// Minimum value of an item necessary to consider showing the piggy bank icon
+const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when doing so with the
 // goal of storing money away
-const maxPiggyBankExpense = 400
-// Minimum value of an item necessary to consider showing the piggy bank icon
-const minPiggyBankValue = 20000
+const defaultMaxPiggyBankExpense = 450
 
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
@@ -36,11 +38,11 @@ async function requireElement(selector, maxRetries) {
         var element = document.querySelector(selector)
         if (element) return
 
-        // console.log("[TMM] waiting for dom element to be present (250ms)")
+        // console.log("[TM+] waiting for dom element to be present (250ms)")
         await sleep(250)
         attempt++
     }
-    console.log("[TMM] waiting for dom element to be present has failed all attempts (5s)")
+    console.log("[TM+] waiting for dom element to be present has failed all attempts (5s)")
 }
 
 async function requireNotElement(selector) {
@@ -49,16 +51,19 @@ async function requireNotElement(selector) {
         var element = document.querySelector(selector)
         if (!element) return
 
-        // console.log("[TMM] waiting for dom element to not be present (250ms)")
+        // console.log("[TM+] waiting for dom element to not be present (250ms)")
         await sleep(250)
         attempt++
     }
-    console.log("[TMM] waiting for dom element to not be present has failed all attempts (5s)")
+    console.log("[TM+] waiting for dom element to not be present has failed all attempts (5s)")
 }
 
 async function fetchItemsFromAPI () {
-    console.log("[TMM] fetching item list from API")
-    var url = "https://api.torn.com/torn/?selections=items&key=2rnP7yh9fXM5x0ru"
+    console.log("[TM+] fetching item list from API")
+    var storedObj = await browser.storage.local.get("apiKey")
+    if (!storedObj.apiKey) console.log("[TM+] api key not found")
+    // TODO handle case where this is not found
+    var url = "https://api.torn.com/torn/?selections=items&key="+storedObj.apiKey
     let response = await fetch(url)
     let data = await response.json()
     if (!data.items) return
@@ -78,33 +83,62 @@ async function fetchItemsFromAPI () {
     return pricesTable
 }
 
-function storePricesTable(pricesTable) {
-    // it's not possible to store a map directly
-    // thus needs to be wrapped in an object
-    browser.storage.local.set({map: pricesTable})
-}
-
-async function recoverPricesTableFromStorage() {
-    return browser.storage.local.get()
-}
-
 async function getPricesTable() {
     // avoid fetching/retrieving the data if already done so
     if (pricesTable) return pricesTable
 
-    pricesTable = await recoverPricesTableFromStorage()
-    if (typeof pricesTable.map === 'undefined') {
+    var storedObj = await browser.storage.local.get("pricesTable")
+    if (!storedObj.pricesTable) {
         pricesTable = await fetchItemsFromAPI()
-        if (!pricesTable) {
-            console.log("[TMM] failed to fetch items, aborting")
+        if (typeof pricesTable === 'undefined') {
+            console.log("[TM+] failed to fetch items, aborting")
             return
         }
-        storePricesTable(pricesTable)
+        browser.storage.local.set({pricesTable})
     } else {
-        // console.log("[TMM] loaded from storage")
-        pricesTable = pricesTable.map
+        pricesTable = storedObj.pricesTable
     }
     return pricesTable
+}
+
+async function getMinProfit() {
+    var value
+    await browser.storage.local.get([
+        "minProfit",
+    ]).then(values => {
+        value = (values.minProfit) ? values.minProfit : defaultMinProfit
+    })
+    return value
+}
+
+async function getMinPercentage() {
+    var value
+    await browser.storage.local.get([
+        "minPercentage",
+    ]).then(values => {
+        value = (values.minPercentage) ? values.minPercentage : defaultMinPercentage
+    })
+    return value
+}
+
+async function getMinPiggyBankValue() {
+    var value
+    await browser.storage.local.get([
+        "minPiggyBankValue",
+    ]).then(values => {
+        value = (values.minPiggyBankValue) ? values.minPiggyBankValue : defaultMinPiggyBankValue
+    })
+    return value
+}
+
+async function getMaxPiggyBankExpense() {
+    var value
+    await browser.storage.local.get([
+        "maxPiggyBankExpense",
+    ]).then(values => {
+        value = (values.maxPiggyBankExpense) ? values.maxPiggyBankExpense : defaultMaxPiggyBankExpense
+    })
+    return value
 }
 
 function Mutex() {

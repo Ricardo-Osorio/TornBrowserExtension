@@ -18,12 +18,12 @@ async function requestHandler() {
     browser.tabs.query({currentWindow: true, active: true})
     .then((tabs) => {
         if (regexListingsPage.test(tabs[0].url)) {
-            console.log("[TMM] background script detected request on listings page")
+            // console.log("[TM+] background script detected request on listings page")
             browser.tabs.executeScript({
                 file: "/scripts/content/listings/listings.js"
             })
         } else if (regexMarketPage.test(tabs[0].url)) {
-            console.log("[TMM] background script detected request on market page")
+            // console.log("[TM+] background script detected request on market page")
             browser.tabs.executeScript({
                 file: "/scripts/content/market/highlight.js"
             })

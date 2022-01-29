@@ -4,7 +4,7 @@ handleRequest()
 
 async function handleRequest() {
     var unlock = await listingsScriptMutex.lock()
-    console.log("[TMM] listings script started")
+    console.log("[TM+] listings script started")
 
     await requireElement("#display-request-state", 3) // 0.75s
     var priceChangeNode = document.querySelector("#display-request-state")
@@ -19,13 +19,13 @@ async function handleRequest() {
     var targetName = textContent.match(/for\s((\w)+\s?)+\sto/)[0] // "for Kitten Plushie to"
     targetName = targetName.slice(4,-3) // Kitten Plushie
 
-    console.log(`[TMM] detected item ${targetName} price change to ${targetPrice}`)
+    console.log(`[TM+] detected item ${targetName} price change to ${targetPrice}`)
 
     for (var item of document.querySelectorAll("li.market-item")) {
         var name = item.querySelector(":scope div.desc > span").textContent
 
         if (name !== targetName) {
-            console.log(`[TMM] item name ${name} does not match ${targetName}, skipping`)
+            console.log(`[TM+] item name ${name} does not match ${targetName}, skipping`)
             continue
         }
 
@@ -34,7 +34,7 @@ async function handleRequest() {
         currentPrice = parseInt(currentPrice.slice(1).replaceAll(",",""))
 
         if (currentPrice == targetPrice) {
-            console.log(`[TMM] item ${name} price does not need update, skipping`)
+            console.log(`[TM+] item ${name} price does not need update, skipping`)
             continue
         }
 
@@ -48,7 +48,7 @@ async function handleRequest() {
         var confirm = item.querySelector(":scope div.pay-fee span.yes a")
         confirm.click()
 
-        console.log(`[TMM] item ${name} price updated from ${currentPrice} to ${targetPrice}`)
+        console.log(`[TM+] item ${name} price updated from ${currentPrice} to ${targetPrice}`)
     }
 
     await retryRemove()

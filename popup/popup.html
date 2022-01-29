@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="popup.css"/>
+  </head>
+
+  <body>
+    <div id="popup-content">
+        <div class="padding">
+            API Key: <input type="text" id="apikey" placeholder="XXXXXXX">
+            <button id="apikeybtn">Set</button>
+        </div>
+        <div class="padding">
+            Minimum profit: <input type="number" id="minProfit" placeholder="1000" value="1000" min="1" class="input-normal">
+        </div>
+        <div class="padding">
+            Minimum sale (%): <input type="number" id="minPercentage" size="3" placeholder="25%" value="25" min="1" max="100" class="input-small">
+        </div>
+        <div class="padding">
+            Minimum piggy bank value: <input type="number" id="minPiggyBankValue" placeholder="20000" value="20000" min="1" class="input-normal">
+        </div>
+        <div class="padding">
+            Maximum piggy bank expense: <input type="number" id="maxPiggyBankExpense" placeholder="450" value="450" min="1" class="input-normal">
+        </div>
+        <div>
+          <button id="valuesbtn" class="input-bottom-button" onclick="setConfigValues()">Set values</button>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+
+</html>

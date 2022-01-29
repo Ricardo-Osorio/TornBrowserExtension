@@ -141,4 +141,4 @@ if (window.location.href !== "https://www.torn.com/shops.php?step=candy") {
 
 body.appendChild(bar)
 
-console.log("[TMM] side bar loaded")
+console.log("[TM+] side bar loaded")

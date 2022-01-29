@@ -1,15 +1,23 @@
 {
     "manifest_version": 2,
-    "name": "TornMoneyMaker",
-    "version": "1.0",
-    "description": "Amazing extension.",
-    "author": "Rick",
+    "name": "TornMarket+",
+    "version": "0.1.1",
+    "description": "Provides additional information on the market related pages of the game Torn.",
+    "author": "Ricardo Osorio",
     "permissions": [
       "storage",
       "webRequest",
       "https://www.torn.com/*",
       "https://api.torn.com/*"
     ],
+
+    "browser_action": {
+      "default_icon": {
+        "32": "resources/icons/icon.png"
+      },
+      "default_title": "Torn Market+",
+      "default_popup": "popup/popup.html"
+    },    
 
     "background": {
       "scripts": [
