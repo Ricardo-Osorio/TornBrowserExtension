@@ -12,6 +12,8 @@ const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when doing so with the
 // goal of storing money away
 const defaultMaxPiggyBankExpense = 450
+// number of miliseconds in a minute
+const msInMinute = 60000
 
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
@@ -60,9 +62,11 @@ async function requireNotElement(selector) {
 
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
+
     var storedObj = await browser.storage.local.get("apiKey")
     if (!storedObj.apiKey) console.log("[TM+] api key not found")
     // TODO handle case where this is not found
+
     var url = "https://api.torn.com/torn/?selections=items&key="+storedObj.apiKey
     let response = await fetch(url)
     let data = await response.json()
