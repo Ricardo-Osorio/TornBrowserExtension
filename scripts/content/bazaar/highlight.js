@@ -31,7 +31,6 @@ async function showHighlight() {
 
         // item fetched from Torn API
         var apiItem = pricesTable.get(itemID)
-        if (!apiItem.price) continue // a few items don't have one, I.G. "Pillow"
 
         // the class "tmm-highlight" is also used here as a controling flag
         // to detect whether an item has already been updated

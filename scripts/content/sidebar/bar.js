@@ -7,8 +7,8 @@ const bar = document.createElement("div")
 bar.classList.add("sidebar-fixed")
 
 // refresh button
-// the content script that defines the "showHighlight" are only loaded
-// with the bazarr and market
+// the content script that defines the "showHighlight" is only loaded
+// with the bazarr and market pages and that's when we need this btn
 if (typeof showHighlight !== 'undefined') {
     var button = document.createElement("button")
     button.classList.add("tooltip")
@@ -44,7 +44,7 @@ if (window.location.href !== "https://www.torn.com/imarket.php") {
     tooltip.appendChild(document.createTextNode("Market"))
     button.appendChild(tooltip)
 
-    var icon = document.createElement("img");
+    var icon = document.createElement("img")
     icon.setAttribute("src", getIconURL("market"))
     icon.classList.add("tmm-img")
     button.appendChild(icon)
