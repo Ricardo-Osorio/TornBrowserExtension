@@ -1,5 +1,7 @@
 "use strict"
 
+console.log("[TM+] market script started")
+
 // categories (from the market left side panel) where discount percentages will be shown
 var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
 

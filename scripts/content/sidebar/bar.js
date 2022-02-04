@@ -1,5 +1,7 @@
 "use strict"
 
+console.log("[TM+] loading sidebar")
+
 var body = document.querySelector("#body")
 
 // sidebar div
