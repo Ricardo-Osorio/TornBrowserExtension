@@ -135,11 +135,78 @@ if (window.location.href !== "https://www.torn.com/shops.php?step=candy") {
     var icon = document.createElement("img");
     icon.setAttribute("src", getIconURL("candy"))
     icon.classList.add("tmm-img")
-    bar.appendChild(icon)
     button.appendChild(icon)
 
     bar.appendChild(button)
 }
+
+// Super store button
+if (window.location.href !== "https://www.torn.com/shops.php?step=super") {
+    var button = document.createElement("button")
+    button.classList.add("tooltip")
+    button.onclick = function () {
+        window.location.href = "https://www.torn.com/shops.php?step=super"
+    }
+
+    var tooltip = document.createElement("span")
+    tooltip.classList.add("tooltiptext")
+    tooltip.appendChild(document.createTextNode("Super Store"))
+    button.appendChild(tooltip)
+
+    var icon = document.createElement("img");
+    icon.setAttribute("src", getIconURL("super-store"))
+    icon.classList.add("tmm-img")
+    button.appendChild(icon)
+
+    bar.appendChild(button)
+}
+
+// Clothing store button
+if (window.location.href !== "https://www.torn.com/shops.php?step=clothes") {
+    var button = document.createElement("button")
+    button.classList.add("tooltip")
+    button.onclick = function () {
+        window.location.href = "https://www.torn.com/shops.php?step=clothes"
+    }
+
+    var tooltip = document.createElement("span")
+    tooltip.classList.add("tooltiptext")
+    tooltip.appendChild(document.createTextNode("Super Store"))
+    button.appendChild(tooltip)
+
+    var icon = document.createElement("img");
+    icon.setAttribute("src", getIconURL("shirt"))
+    icon.classList.add("tmm-img")
+    button.appendChild(icon)
+
+    bar.appendChild(button)
+}
+
+// Last bazaar visited button
+GetLastBazaarVisitedBtn()
+async function GetLastBazaarVisitedBtn() {
+    var storedObj = await browser.storage.local.get("lastBazaar")
+    if (storedObj.lastBazaar && window.location.href !== storedObj.lastBazaar) {
+        var button = document.createElement("button")
+        button.classList.add("tooltip")
+        button.onclick = function () {
+            window.location.href = storedObj.lastBazaar
+        }
+
+        var tooltip = document.createElement("span")
+        tooltip.classList.add("tooltiptext")
+        tooltip.appendChild(document.createTextNode("Last bazaar visited"))
+        button.appendChild(tooltip)
+
+        var icon = document.createElement("img");
+        icon.setAttribute("src", getIconURL("last-bazaar"))
+        icon.classList.add("tmm-img")
+        button.appendChild(icon)
+
+        bar.appendChild(button)
+    }
+}
+
 
 body.appendChild(bar)
 

@@ -2,6 +2,7 @@
 
 showHighlight()
 listenForChanges()
+saveBazaar()
 
 async function showHighlight() {
     console.log("[TM+] bazaar highlight script started")
@@ -191,4 +192,9 @@ async function handleNewRow(pricesTable, newRow) {
             wrapper.appendChild(piggyBankElement)
         }
     }
+}
+
+function saveBazaar() {
+    var lastBazaar = window.location.href
+    browser.storage.local.set({lastBazaar})
 }

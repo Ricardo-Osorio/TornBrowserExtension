@@ -18,6 +18,21 @@ const msInMinute = 60000
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
 
+// Market category names on the market sidepanel don't exactly match the ones from the
+// api. This map helps with that, mapping the UI name into what to expect from the API
+// const categoriesMap = new Map(
+//     ["medical-items", "Medical"],
+//     ["temporary-items", "Temporary"],
+//     ["energy-drinks", "Energy Drink"],
+//     ["candy", "Drug"],
+//     ["enhancers", "Enhancer"],
+//     ["alcohol", "Alcohol"],
+//     ["flowers", "Flower"],
+//     ["clothing", "Clothing"],
+//     ["plushies", "Plushie"],
+//     ["special-items", "Special"],
+// )
+
 // In-memory mapping of all items and their selling and market prices.
 // Fetched from the Torn API once and then stored/retrieved from the browser.
 // Selling prices don't change and market prices don't flutuate much
