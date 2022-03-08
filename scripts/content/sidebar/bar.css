@@ -47,7 +47,7 @@
     content: " ";
     position: absolute;
     top: 50%;
-    left: 100%; /* Add the arrow to the rigth side of the tooltip */
+    left: 100%; /* Add the arrow to the right side of the tooltip */
     margin-top: -5px;
     border-width: 5px;
     border-style: solid;

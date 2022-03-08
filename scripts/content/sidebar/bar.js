@@ -171,7 +171,7 @@ if (window.location.href !== "https://www.torn.com/shops.php?step=clothes") {
 
     var tooltip = document.createElement("span")
     tooltip.classList.add("tooltiptext")
-    tooltip.appendChild(document.createTextNode("Super Store"))
+    tooltip.appendChild(document.createTextNode("TC Clothing"))
     button.appendChild(tooltip)
 
     var icon = document.createElement("img");

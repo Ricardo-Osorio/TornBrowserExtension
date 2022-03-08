@@ -12,13 +12,13 @@ const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when doing so with the
 // goal of storing money away
 const defaultMaxPiggyBankExpense = 450
-// number of miliseconds in a minute
+// number of milliseconds in a minute
 const msInMinute = 60000
 
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
 
-// Market category names on the market sidepanel don't exactly match the ones from the
+// Market category names on the market side panel don't exactly match the ones from the
 // api. This map helps with that, mapping the UI name into what to expect from the API
 // const categoriesMap = new Map(
 //     ["medical-items", "Medical"],
@@ -35,7 +35,7 @@ const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=
 
 // In-memory mapping of all items and their selling and market prices.
 // Fetched from the Torn API once and then stored/retrieved from the browser.
-// Selling prices don't change and market prices don't flutuate much
+// Selling prices don't change and market prices don't fluctuate much
 // for most items. This should still be updated periodically (TODO).
 var pricesTable
 
@@ -178,6 +178,6 @@ function Mutex() {
 }
 
 // ensures the script runs one at a time. The background script can fire
-// multiple simulataneos instances of the content scripts
+// multiple simultaneous instances of the content scripts
 const listingsScriptMutex = new Mutex();
 const marketScriptMutex = new Mutex();
