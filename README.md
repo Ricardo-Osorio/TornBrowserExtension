@@ -1,3 +1,5 @@
+# Torn extension in early development
+
 Bugs:
     - The sidebar is currently being added multiple times whenever the script is loaded (at the moment it's only on manual reload but this should be prevented anyways)
     - On a bazaar, pressing the "buy" on an item that is highlighted but then aborting and closing that small "buy" window will restore the object to the original form without a price (profile element)
@@ -9,10 +11,6 @@ Bugs:
 Features:
     - Menu that stays over other elements in the page with options:
         - Able to hide the sidebar and show it on mouse hover?
-        - Add an option to go back to the last visited bazaar
-    - New icon for the popup
-    - Clicking the buy from the market page will open a list of bazaar/people. This could have some sort of highlight to help find the one that is cheapest
-    - Add a blacklist bazaar list that somehow highlights them with a red cross or lock and prevents me from losing time with those
     - For items selling at < $5 show a different color "discount" background image (something that clearly calls the attention) in place of the typical red one
     - Try to update manifest to load scripts with "document_idle" instead of "document_end" as that means the page as loaded everything and thus may be able to remove some "await requireElement"s
     - Listings page, able to remove all listings of an item
