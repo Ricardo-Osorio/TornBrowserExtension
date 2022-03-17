@@ -185,12 +185,12 @@ if (window.location.href !== "https://www.torn.com/shops.php?step=clothes") {
 // Last bazaar visited button
 GetLastBazaarVisitedBtn()
 async function GetLastBazaarVisitedBtn() {
-    var storedObj = await browser.storage.local.get("lastBazaar")
-    if (storedObj.lastBazaar && window.location.href !== storedObj.lastBazaar) {
+    var lastBazaar = await get("lastBazaar")
+    if (lastBazaar && window.location.href !== lastBazaar) {
         var button = document.createElement("button")
         button.classList.add("tooltip")
         button.onclick = function () {
-            window.location.href = storedObj.lastBazaar
+            window.location.href = lastBazaar
         }
 
         var tooltip = document.createElement("span")

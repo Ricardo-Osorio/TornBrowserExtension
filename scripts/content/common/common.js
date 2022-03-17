@@ -36,7 +36,7 @@ const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=
 // In-memory mapping of all items and their selling and market prices.
 // Fetched from the Torn API once and then stored/retrieved from the browser.
 // Selling prices don't change and market prices don't fluctuate much
-// for most items. This should still be updated periodically (TODO).
+// for most items..
 var pricesTable
 
 function sleep(ms) {
@@ -46,7 +46,7 @@ function sleep(ms) {
 // Builds the URL to fetch the icons. Supports as input:
 // candy, car, market, refresh, rifle, tools and piggy-bank
 function getIconURL(name) {
-    return browser.extension.getURL("resources/icons/"+name+"-icon.png");  
+    return chrome.extension.getURL("resources/icons/"+name+"-icon.png");  
 }
 
 async function requireElement(selector, maxRetries) {
@@ -75,14 +75,25 @@ async function requireNotElement(selector) {
     console.log("[TM+] waiting for dom element to not be present has failed all attempts (5s)")
 }
 
+function get(key) {
+    return new Promise(async (resolve) => {
+        const data = await new Promise((resolve) => chrome.storage.local.get([key], (data) => resolve(data)))
+        resolve(data[key])
+    })
+}
+
+function set(object) {
+    return new Promise((resolve) => chrome.storage.local.set(object, () => resolve()))
+}
+
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
-    var storedObj = await browser.storage.local.get("apiKey")
-    if (!storedObj.apiKey) console.log("[TM+] api key not found")
+    var apiKey = await get("apiKey")
+    if (!apiKey) console.log("[TM+] api key not found")
     // TODO handle case where this is not found
 
-    var url = "https://api.torn.com/torn/?selections=items&key="+storedObj.apiKey
+    var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
     let response = await fetch(url)
     let data = await response.json()
     if (!data.items) return
@@ -99,65 +110,49 @@ async function fetchItemsFromAPI () {
             }
         )
     })
+
+    console.log("[TM+] API request successful")
     return pricesTable
 }
 
 async function getPricesTable() {
     // avoid fetching/retrieving the data if already done so
-    if (pricesTable) return pricesTable
+    if (pricesTable && Object.keys(pricesTable).length !== 0) return pricesTable
 
-    var storedObj = await browser.storage.local.get("pricesTable")
-    if (!storedObj.pricesTable) {
+    console.log("[TM+] prices table NOT found in-memory")
+
+    var pricesTable = await get("pricesTable")
+    if (!pricesTable || Object.keys(pricesTable).length === 0) {
         pricesTable = await fetchItemsFromAPI()
         if (typeof pricesTable === 'undefined') {
             console.log("[TM+] failed to fetch items, aborting")
             return
         }
-        browser.storage.local.set({pricesTable})
+        await set({pricesTable})
     } else {
-        pricesTable = storedObj.pricesTable
+        pricesTable = pricesTable
     }
     return pricesTable
 }
 
 async function getMinProfit() {
-    var value
-    await browser.storage.local.get([
-        "minProfit",
-    ]).then(values => {
-        value = (values.minProfit) ? values.minProfit : defaultMinProfit
-    })
-    return value
+    var value = await get("minProfit")
+    return (value) ? value : defaultMinProfit
 }
 
 async function getMinPercentage() {
-    var value
-    await browser.storage.local.get([
-        "minPercentage",
-    ]).then(values => {
-        value = (values.minPercentage) ? values.minPercentage : defaultMinPercentage
-    })
-    return value
+    var value = await get("minPercentage")
+    return (value) ? value : defaultMinPercentage
 }
 
 async function getMinPiggyBankValue() {
-    var value
-    await browser.storage.local.get([
-        "minPiggyBankValue",
-    ]).then(values => {
-        value = (values.minPiggyBankValue) ? values.minPiggyBankValue : defaultMinPiggyBankValue
-    })
-    return value
+    var value = await get("minPiggyBankValue")
+    return (value) ? value : defaultMinPiggyBankValue
 }
 
 async function getMaxPiggyBankExpense() {
-    var value
-    await browser.storage.local.get([
-        "maxPiggyBankExpense",
-    ]).then(values => {
-        value = (values.maxPiggyBankExpense) ? values.maxPiggyBankExpense : defaultMaxPiggyBankExpense
-    })
-    return value
+    var value = await get("maxPiggyBankExpense")
+    return (value) ? value : defaultMaxPiggyBankExpense
 }
 
 function Mutex() {

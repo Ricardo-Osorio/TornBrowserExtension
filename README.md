@@ -75,6 +75,8 @@ Prices and items are updated once every minute, thus making one API request ever
 - On the market page, after buying an item with highlights from the "quick buy" option (not opening a bazaar) and closing the window, the highlights are not removed.
 It would be nice to handle this case even thought its expected due to nothing ever actually changing on that page.
 - Bazaar discounts are shown for every category since categories are not available there. However if those were to be stored together with the list of all items (data is available at that point) that could be fixed.
+- Replace all "var" with "let"
+- I am seeing wrong discount percentages from time to time on random items. The background process keeping prices up to data could be seeing some sort of issue. Needs investigating.
 
 ## Boring section
 Below are some limitation I found when working on the project and how I deal with them:

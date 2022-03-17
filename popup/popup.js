@@ -1,40 +1,38 @@
-var storedObj = browser.storage.local.get([
-    "apiKey",
-    "minProfit",
-    "minPercentage",
-    "minPiggyBankValue",
-    "maxPiggyBankExpense"
-])
-storedObj.then(setInititalValues)
+setInitialValues()
 
-function setInititalValues(values) {
-    if (!values.apiKey || values.apiKey === "") {
+async function setInitialValues() {
+    var apiKey = await get("apiKey")
+    var minProfit = await get("minProfit")
+    var minPercentage = await get("minPercentage")
+    var minPiggyBankValue = await get("minPiggyBankValue")
+    var maxPiggyBankExpense = await get("maxPiggyBankExpense")
+
+    if (!apiKey || apiKey === "") {
         console.log("no api key")
         // TODO handle case
     } else {
-        document.querySelector("#apikey").value = values.apiKey
+        document.querySelector("#apikey").value = apiKey
     }
 
-    if (values.minProfit) document.querySelector("#minProfit").value = values.minProfit
-    if (values.minPercentage) document.querySelector("#minPercentage").value = values.minPercentage
-    if (values.minPiggyBankValue) document.querySelector("#minPiggyBankValue").value = values.minPiggyBankValue
-    if (values.maxPiggyBankExpense) document.querySelector("#maxPiggyBankExpense").value = values.maxPiggyBankExpense
+    if (minProfit) document.querySelector("#minProfit").value = minProfit
+    if (minPercentage) document.querySelector("#minPercentage").value = minPercentage
+    if (minPiggyBankValue) document.querySelector("#minPiggyBankValue").value = minPiggyBankValue
+    if (maxPiggyBankExpense) document.querySelector("#maxPiggyBankExpense").value = maxPiggyBankExpense
 }
 
 document.querySelector("#apikeybtn").addEventListener("click", setApiKey)
 document.querySelector("#valuesbtn").addEventListener("click", setConfigValues)
 
-function setApiKey() {
-    console.log("setApiKey")
+async function setApiKey() {
     var apiKey = document.querySelector("#apikey").value
     if (apiKey == "") {
         // invalid
     }
-    console.log(`[TM+] api key: ${apiKey}`)
-    browser.storage.local.set({apiKey})
+    // console.log(`[TM+] api key: ${apiKey}`)
+    await set({apiKey})
 }
 
-function setConfigValues() {
+async function setConfigValues() {
     console.log("setConfigValues")
     var minProfit = document.querySelector("#minProfit").value
     if (minProfit == "" || minProfit < 1) {
@@ -57,10 +55,19 @@ function setConfigValues() {
     }
 
     console.log(`[TM+] min profit: ${minProfit}, min percentage: ${minPercentage}, min piggy bank ${minPiggyBankValue}, max piggy bank expense: ${maxPiggyBankExpense}`)
-    browser.storage.local.set({
-        minProfit,
-        minPercentage,
-        minPiggyBankValue,
-        maxPiggyBankExpense
+    await set(minProfit)
+    await set(minPercentage)
+    await set(minPiggyBankValue)
+    await set(maxPiggyBankExpense)
+}
+
+function get(key) {
+    return new Promise(async (resolve) => {
+        const data = await new Promise((resolve) => chrome.storage.local.get([key], (data) => resolve(data)))
+        resolve(data[key])
     })
+}
+
+function set(object) {
+    return new Promise((resolve) => chrome.storage.local.set(object, () => resolve()))
 }

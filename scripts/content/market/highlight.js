@@ -1,7 +1,5 @@
 "use strict"
 
-console.log("[TM+] market script started")
-
 // categories (from the market left side panel) where discount percentages will be shown
 var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
 
@@ -96,6 +94,7 @@ async function showHighlight() {
 
 // Decide if profit is within desired margin and build the node if needed.
 function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
+    // console.log(`[TM+] handleProfit: ${sellingPrice}, ${currentPrice}, ${desiredMinProfit}`)
     if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
     var profit = sellingPrice - currentPrice
@@ -113,6 +112,7 @@ function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
 
 // TODO value gain from selling at current market price
 function handleProfitResell(marketPrice, currentPrice, category) {
+    // console.log(`[TM+] handleProfitResell: ${marketPrice}, ${currentPrice}, ${category}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Pillow"
 
     if (!categoriesWithResellingProfit.includes(category)) return
@@ -134,6 +134,7 @@ function handleProfitResell(marketPrice, currentPrice, category) {
 // Decide if discount is within desired margin and build the node if needed.
 // Filters out categories not present in the `category` array.
 function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
+    // console.log(`[TM+] handleDiscount: ${marketPrice}, ${currentPrice}, ${category}, ${desiredMinPercentage}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
     if (!categoriesWithDiscounts.includes(category)) return
