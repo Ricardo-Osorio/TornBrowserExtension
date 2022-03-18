@@ -12,8 +12,6 @@ const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when doing so with the
 // goal of storing money away
 const defaultMaxPiggyBankExpense = 450
-// number of milliseconds in a minute
-const msInMinute = 60000
 
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
@@ -46,7 +44,7 @@ function sleep(ms) {
 // Builds the URL to fetch the icons. Supports as input:
 // candy, car, market, refresh, rifle, tools and piggy-bank
 function getIconURL(name) {
-    return chrome.extension.getURL("resources/icons/"+name+"-icon.png");  
+    return chrome.runtime.getURL("resources/icons/"+name+"-icon.png");  
 }
 
 async function requireElement(selector, maxRetries) {

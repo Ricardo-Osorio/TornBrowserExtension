@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "TornMarket+",
     "version": "0.1.1",
     "description": "Provides additional information and features on the market related pages of the game Torn.",
@@ -7,11 +7,15 @@
     "permissions": [
       "storage",
       "webRequest",
+      "scripting",
+      "alarms"
+    ],
+    "host_permissions": [
       "https://www.torn.com/*",
       "https://api.torn.com/*"
     ],
 
-    "browser_action": {
+    "action": {
       "default_icon": {
         "32": "resources/icons/icon.png"
       },
@@ -20,10 +24,7 @@
     },    
 
     "background": {
-      "scripts": [
-        "scripts/content/common/common.js", 
-        "scripts/background/background.js"
-      ]
+      "service_worker": "scripts/background/background.js"
     },
 
     "content_scripts": [
@@ -67,7 +68,8 @@
       }
     ],
 
-    "web_accessible_resources": [
-      "resources/*"
-    ]
+    "web_accessible_resources": [{
+      "resources": ["resources/*"],
+      "matches": ["https://www.torn.com/*"]
+    }]
 }
