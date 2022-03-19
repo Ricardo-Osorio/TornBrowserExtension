@@ -33,7 +33,7 @@ async function showHighlight() {
     }
 
     var pricesTable = await getPricesTable()
-    // TODO handle case where this fails
+    // TODO handle case where this fails?
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 

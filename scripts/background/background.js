@@ -1,14 +1,23 @@
 "use strict"
 
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+        console.log(
+            `Storage key "${key}" in namespace "${namespace}" changed.`,
+            `Old value was "${oldValue}", new value is "${newValue}".`
+        )   
+    }   
+})
+
 // number of milliseconds in a minute
 const msInMinute = 60000
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
 
-chrome.alarms.create({ 
+chrome.alarms.create({
     delayInMinutes: 0,
     periodInMinutes: 1
-});
+})
 
 chrome.alarms.onAlarm.addListener(() => {
     apiDataControlLoop()
@@ -48,39 +57,35 @@ function requestHandler() {
 }
 
 async function apiDataControlLoop() {
-    console.log("[TM+] new loop iteration")
+    console.log("[TM+] checking API data")
 
-    // timestamp of previous data update
-    var lastUpdateTs
     let currentTs = Date.now()
 
     var timestamp = await get("timestamp")
-    if (!timestamp) { // no data stored, can be the first run or it was deleted
-        console.log("[TM+] no timestamp found")
-        lastUpdateTs = Date.now() - 2*msInMinute // fake value to force an update
-    } else {
-        lastUpdateTs = timestamp
-    }
-
-    if (currentTs - lastUpdateTs > msInMinute ) {
-        console.log("[TM+] more than a minute since last update")
-        var pricesTable = await fetchItemsFromAPI()
-        if (typeof pricesTable === 'undefined') {
-            console.log("[TM+] failed to fetch items, aborting")
-            return
-        }
-
-        await set({pricesTable, timestamp: currentTs})
-    } else {
+    if (timestamp && currentTs - timestamp < msInMinute) {
         console.log("[TM+] less than a minute since last update")
+        return
     }
+
+    console.log("[TM+] more than a minute since last update")
+    var pricesTable = await fetchItemsFromAPI()
+    if (typeof pricesTable === 'undefined') {
+        console.log("[TM+] failed to fetch items, aborting")
+        return
+    }
+
+    let pricesTableObj = Object.fromEntries(pricesTable)
+    set({pricesTableObj, timestamp: currentTs})
 }
 
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
     var apiKey = await get("apiKey")
-    if (!apiKey) console.log("[TM+] api key not found")
+    if (!apiKey) {
+        console.log("[TM+] api key not found")
+        return
+    }
     // TODO handle case where this is not found
 
     var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
@@ -90,6 +95,7 @@ async function fetchItemsFromAPI () {
 
     let pricesTable = new Map()
 
+    let count = 0
     // extract a map[item ID] -> {selling price, market price}
     Object.keys(data.items).forEach((key, index) => {
         pricesTable.set(
@@ -99,23 +105,20 @@ async function fetchItemsFromAPI () {
                 marketPrice: data.items[key].market_value
             }
         )
+        count++
     })
 
-    console.log("[TM+] API request successful")
+    console.log(`[TM+] API request successful, stored ${count} items`)
     return pricesTable
 }
 
 function get(key) {
     return new Promise(async (resolve) => {
-        const data = await new Promise((resolve) => chrome.storage.local.get([key], (data) => resolve(data)))
+        const data = await new Promise((resolve) => chrome.storage.local.get(key, (data) => resolve(data)))
         resolve(data[key])
     })
 }
 
 function set(object) {
     return new Promise((resolve) => chrome.storage.local.set(object, () => resolve()))
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }

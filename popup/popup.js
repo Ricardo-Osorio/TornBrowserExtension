@@ -62,9 +62,12 @@ async function setConfigValues() {
 }
 
 function get(key) {
-    return new Promise(async (resolve) => {
-        const data = await new Promise((resolve) => chrome.storage.local.get([key], (data) => resolve(data)))
-        resolve(data[key])
+    // Immediately return a promise and start asynchronous work
+    return new Promise((resolve) => {
+        // Asynchronously call
+        chrome.storage.local.get(key, (items) => {
+            resolve(items[key])
+        })
     })
 }
 

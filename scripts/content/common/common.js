@@ -31,12 +31,6 @@ const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=
 //     ["special-items", "Special"],
 // )
 
-// In-memory mapping of all items and their selling and market prices.
-// Fetched from the Torn API once and then stored/retrieved from the browser.
-// Selling prices don't change and market prices don't fluctuate much
-// for most items..
-var pricesTable
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -44,7 +38,7 @@ function sleep(ms) {
 // Builds the URL to fetch the icons. Supports as input:
 // candy, car, market, refresh, rifle, tools and piggy-bank
 function getIconURL(name) {
-    return chrome.runtime.getURL("resources/icons/"+name+"-icon.png");  
+    return chrome.runtime.getURL("resources/icons/"+name+"-icon.png")
 }
 
 async function requireElement(selector, maxRetries) {
@@ -74,9 +68,12 @@ async function requireNotElement(selector) {
 }
 
 function get(key) {
-    return new Promise(async (resolve) => {
-        const data = await new Promise((resolve) => chrome.storage.local.get([key], (data) => resolve(data)))
-        resolve(data[key])
+    // Immediately return a promise and start asynchronous work
+    return new Promise((resolve) => {
+        // Asynchronously call
+        chrome.storage.local.get(key, (items) => {
+            resolve(items[key])
+        })
     })
 }
 
@@ -98,6 +95,7 @@ async function fetchItemsFromAPI () {
 
     let pricesTable = new Map()
 
+    let count = 0
     // extract a map[item ID] -> {selling price, market price}
     Object.keys(data.items).forEach((key, index) => {
         pricesTable.set(
@@ -107,29 +105,33 @@ async function fetchItemsFromAPI () {
                 marketPrice: data.items[key].market_value
             }
         )
+        count++
     })
 
-    console.log("[TM+] API request successful")
+    console.log(`[TM+] API request successful, got ${count} items`)
     return pricesTable
 }
 
 async function getPricesTable() {
-    // avoid fetching/retrieving the data if already done so
-    if (pricesTable && Object.keys(pricesTable).length !== 0) return pricesTable
-
-    console.log("[TM+] prices table NOT found in-memory")
-
-    var pricesTable = await get("pricesTable")
-    if (!pricesTable || Object.keys(pricesTable).length === 0) {
-        pricesTable = await fetchItemsFromAPI()
-        if (typeof pricesTable === 'undefined') {
-            console.log("[TM+] failed to fetch items, aborting")
-            return
+    let pricesTableObj = await get("pricesTableObj")
+    if (typeof pricesTableObj !== 'undefined') {
+        let pricesTable = new Map(Object.entries(pricesTableObj))
+        if (pricesTable.size !== 0) {
+            console.log("[TM+] prices table fetched from storage. Size: " + pricesTable.size)
+            return pricesTable
         }
-        await set({pricesTable})
-    } else {
-        pricesTable = pricesTable
     }
+    
+    // background script failed to get data or didn't run in time?
+
+    let pricesTable = await fetchItemsFromAPI()
+    if (typeof pricesTable === 'undefined' || pricesTable.size === 0) {
+        console.log("[TM+] failed to fetch items, aborting")
+        return
+    }
+
+    pricesTableObj = Object.fromEntries(pricesTable)
+    set(pricesTableObj)
     return pricesTable
 }
 
