@@ -1,0 +1,5 @@
+# the extension code should try to be compatible with both browsers
+# thus, until manifest version allow that, they are kept separate
+extension/manifest.json
+
+torn-market-plus.zip
