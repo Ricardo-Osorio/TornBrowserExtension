@@ -7,7 +7,6 @@
     "permissions": [
       "storage",
       "webRequest",
-      "scripting",
       "alarms"
     ],
     "host_permissions": [
