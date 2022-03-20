@@ -3,15 +3,11 @@
 handleRequest()
 
 async function handleRequest() {
-    var unlock = await listingsScriptMutex.lock()
     console.log("[TM+] listings script started")
 
     await requireElement("#display-request-state", 3) // 0.75s
     var priceChangeNode = document.querySelector("#display-request-state")
-    if (!priceChangeNode) {
-        unlock()
-        return
-    }
+    if (!priceChangeNode) return
 
     var textContent = priceChangeNode.querySelector(":scope p").textContent // You changed your price for Kitten Plushie to $3,945.
     
@@ -52,8 +48,6 @@ async function handleRequest() {
     }
 
     await retryRemove()
-
-    unlock()
 }
 
 async function retryRemove() {

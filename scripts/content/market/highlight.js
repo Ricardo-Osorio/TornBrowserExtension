@@ -15,8 +15,6 @@ async function showHighlight() {
         console.log("[TM+] market script matched listings page URL, aborting")
         return
     }
-
-    var unlock = await marketScriptMutex.lock()
     
     console.log("[TM+] market highlight script started")
 
@@ -30,7 +28,6 @@ async function showHighlight() {
     var earlyExit = document.querySelector("[aria-expanded='true'] > * .tmm-title-adjust")
     if (earlyExit) {
         console.log("[TM+] return early")
-        unlock()
         return
     }
 
@@ -53,7 +50,6 @@ async function showHighlight() {
         var titleElement = item.querySelector(":scope > .title")
         if (titleElement.classList.contains("tmm-title-adjust")) {
             console.log("[TM+] return early")
-            unlock()
             return
         }
 
@@ -91,7 +87,6 @@ async function showHighlight() {
     }
 
     console.log("[TM+] done")
-    unlock()
 }
 
 // Decide if profit is within desired margin and build the node if needed.

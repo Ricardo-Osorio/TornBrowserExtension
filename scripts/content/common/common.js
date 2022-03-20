@@ -172,25 +172,3 @@ async function getMaxPiggyBankExpense() {
     var value = await get("maxPiggyBankExpense")
     return (value) ? value : defaultMaxPiggyBankExpense
 }
-
-function Mutex() {
-    let current = Promise.resolve()
-    this.lock = () => {
-        let _resolve
-        const p = new Promise(resolve => {
-            _resolve = () => resolve()
-        })
-        // Caller gets a promise that resolves when the current outstanding
-        // lock resolves
-        const rv = current.then(() => _resolve)
-        // Don't allow the next request until the new promise is done
-        current = p
-        // Return the new promise
-        return rv
-    }
-}
-
-// ensures the script runs one at a time. The background script can fire
-// multiple simultaneous instances of the content scripts
-const listingsScriptMutex = new Mutex();
-const marketScriptMutex = new Mutex();
