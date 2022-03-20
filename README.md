@@ -1,10 +1,8 @@
 # Torn extension (early development)
 
-Mozilla browser extension developed for the game [Torn](www.torn.com) focused on providing a better user experience on the market related pages (market, bazaar, npc stores, ...) compared to what the base game offers.
+Browser extension for the game [Torn.com](www.torn.com) focused on improving the market experience!
 
-Being an early product keep in mind that any of the current feature could change at any time.
-
-Development will continue for as long as I am enjoying and playing the game but anyone is free to contribute or even fork it! :)
+Product in early stages of development and it will continue for as long as I am enjoying and playing the game but anyone is free to contribute or make it their own! :)
 
 <a target="_blank" href="https://addons.mozilla.org/en-US/firefox/addon/tornmarket/">
     <img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="extension-redirect" width="140" height="65" />
@@ -63,13 +61,9 @@ Prices and items are updated once every minute, thus making one API request ever
 - Show market resell profit on the bazaar pages the same way it is shown on the market pages.
 
 ## Known bugs to fix
-- The sidebar is currently being added multiple times whenever the script is loaded. This doesn't happen under normal use but it should be prevented anyway.
 - On a bazaar, pressing the "buy" on an item that is highlighted but then aborting and closing that small "buy" window will restore the object to the original form without any price highlights or profit elements, basically resetting it.
-- Bazaar items with price of $1 and are locked are still being processed but should be ignored instead.
 - On the market page, after buying an item with highlights from the "quick buy" option (not opening a bazaar) and closing the window, the highlights are not removed.
 It would be nice to handle this case even thought its expected due to nothing ever actually changing on that page.
-- Bazaar discounts are shown for every category since categories are not available there. However if those were to be stored together with the list of all items (data is available at that point) that could be fixed.
-- Replace all "var" with "let"
 - I am seeing wrong discount percentages from time to time on random items. The background process keeping prices up to data could be seeing some sort of issue. Needs investigating.
 
 ## Boring section
