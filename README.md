@@ -1,6 +1,6 @@
 # Torn extension (early development)
 
-Mozilla browser extension developed for the game [Torn](www.torn.com) focused on providing a better user experience on the market related pages (market, bazaar, listings page, npc stores, ...) compared to what the base game offers.
+Mozilla browser extension developed for the game [Torn](www.torn.com) focused on providing a better user experience on the market related pages (market, bazaar, npc stores, ...) compared to what the base game offers.
 
 Being an early product keep in mind that any of the current feature could change at any time.
 
@@ -36,15 +36,11 @@ This extensions adds the following extra information to the pages:
         *This is turned on for all categories in bazaars due to the lack of categories on this page*
     - **Reselling profit** - shows exactly how much profit can be made by buying and selling an item in the NPC stores. Items are also highlighted
     - **Store money in items** - adds a small piggy bank icon to items selling for the same amount as they can be sold to NPC stores, useful to store money in items and knowing you can get it back safely
-- Listings
-    - **Update all prices of the same item** - updating a price of an items with more than one entry will replicate the same action for all others on that same page.
-    
-        *There's a known bug where fast consecutive price updates require to either wait ~30sec or refresh the page before being able to do it again*
 
 On the above pages and the NPC stores there will be a side bar added to the browser allowing for quickly moving around between the market pages. On top of that, one of the buttons takes you back to the last bazaar you visited.
 
 ## Customization
-There's a browser popup where some settings can be configured and the API key updated.
+There's a browser popup to set the API key and customize parameters to your liking.
 - **Minimum profit** - Minimum profit amount needed before displaying the highlight and profit on items
 - **Minimum sale (%)** - Minimum profit percentage needed before displaying the highlight and icon on items
 - **Minimum piggy bank value** - Minimum value necessary to consider an item worth of buying to store money
@@ -63,14 +59,12 @@ Prices and items are updated once every minute, thus making one API request ever
 - Add a setting for the sidebar to not be shown at all.
 - For items selling at less than $5 should be displayed with a different color for the "discount" background image (something that clearly calls the attention) in place of the current red one.
 - Try to update manifest to load scripts with "document_idle" instead of "document_end" as that could lead to removing some "await requireElement"s
-- On the listings page, should be able to remove all listings of an item
 - On the market page, when there's a profit to be made by either reselling to the NPC stores or market again, shows the two values side by side and perhaps different color/icon
 - Show market resell profit on the bazaar pages the same way it is shown on the market pages.
 
 ## Known bugs to fix
 - The sidebar is currently being added multiple times whenever the script is loaded. This doesn't happen under normal use but it should be prevented anyway.
 - On a bazaar, pressing the "buy" on an item that is highlighted but then aborting and closing that small "buy" window will restore the object to the original form without any price highlights or profit elements, basically resetting it.
-- On the listings page, when the user adds a new item it also seems to triggers the script. Needs further testing.
 - Bazaar items with price of $1 and are locked are still being processed but should be ignored instead.
 - On the market page, after buying an item with highlights from the "quick buy" option (not opening a bazaar) and closing the window, the highlights are not removed.
 It would be nice to handle this case even thought its expected due to nothing ever actually changing on that page.
