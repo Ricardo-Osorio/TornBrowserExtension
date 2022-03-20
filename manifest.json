@@ -69,7 +69,7 @@
     ],
 
     "web_accessible_resources": [{
-      "resources": ["resources/*"],
+      "resources": ["resources/*", "scripts/content/common/xhr-intercept.js"],
       "matches": ["https://www.torn.com/*"]
     }]
 }

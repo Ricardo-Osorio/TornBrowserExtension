@@ -1,18 +1,7 @@
 "use strict"
 
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-        console.log(
-            `Storage key "${key}" in namespace "${namespace}" changed.`,
-            `Old value was "${oldValue}", new value is "${newValue}".`
-        )   
-    }   
-})
-
 // number of milliseconds in a minute
 const msInMinute = 60000
-const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
-const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
 
 chrome.alarms.create({
     delayInMinutes: 0,
@@ -22,39 +11,6 @@ chrome.alarms.create({
 chrome.alarms.onAlarm.addListener(() => {
     apiDataControlLoop()
 })
-
-// Listen for requests to the URL below. Unfortunately pretty much all GET requests
-// look almost the same and match "https://www.torn.com/imarket.php?rfcv=*", example:
-//  - loading the the market page;
-//  - loading the user's listings on the market;
-//  - loading each market category (this is why two requests are always made loading the
-//  market page for the first time);
-//  - fetching an item price's data (when pressing an item and more information is shown);
-//  - loading each page of a users listings on the market.
-// Hence why we add a filter based on the URL of the current open tab.
-chrome.webRequest.onCompleted.addListener(
-    requestHandler,
-    {urls: ["https://www.torn.com/imarket.php?rfcv=*"]}
-    // ["blocking"]
-)
-
-function requestHandler() {
-    chrome.tabs.query({currentWindow: true, active: true}, (tabs) => {
-        if (regexListingsPage.test(tabs[0].url)) {
-            // console.log("[TM+] background script detected request on listings page")
-            chrome.scripting.executeScript({
-                files: ["/scripts/content/listings/listings.js"],
-                target: {tabId: tabs[0].id}
-            })
-        } else if (regexMarketPage.test(tabs[0].url)) {
-            // console.log("[TM+] background script detected request on market page")
-            chrome.scripting.executeScript({
-                files: ["/scripts/content/market/highlight.js"],
-                target: {tabId: tabs[0].id}
-            })
-        }
-    })
-}
 
 async function apiDataControlLoop() {
     console.log("[TM+] checking API data")

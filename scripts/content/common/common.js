@@ -31,6 +31,24 @@ const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=
 //     ["special-items", "Special"],
 // )
 
+let injectedXHR
+
+injectXHR()
+
+function injectXHR() {
+	if (injectedXHR) return;
+
+    // create script
+    let scr = document.createElement("script")
+    scr.setAttribute("type", "text/javascript")
+    scr.setAttribute("src", chrome.runtime.getURL("scripts/content/common/xhr-intercept.js"))
+
+    // inject into document
+	document.body.appendChild(scr)
+
+	injectedXHR = true
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

@@ -6,6 +6,8 @@ var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drink
 // categories (from the market left side panel) where reselling profit will be shown
 var categoriesWithResellingProfit = ["flowers", "plushies"]
 
+window.addEventListener("trigger-highlight", showHighlight)
+
 showHighlight()
 
 async function showHighlight() {
