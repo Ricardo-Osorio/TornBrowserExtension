@@ -196,5 +196,5 @@ async function handleNewRow(pricesTable, newRow) {
 
 function saveBazaar() {
     var lastBazaar = window.location.href
-    browser.storage.local.set({lastBazaar})
+    set({lastBazaar})
 }

@@ -12,8 +12,6 @@ const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when doing so with the
 // goal of storing money away
 const defaultMaxPiggyBankExpense = 450
-// number of milliseconds in a minute
-const msInMinute = 60000
 
 const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
 const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
@@ -33,11 +31,23 @@ const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=
 //     ["special-items", "Special"],
 // )
 
-// In-memory mapping of all items and their selling and market prices.
-// Fetched from the Torn API once and then stored/retrieved from the browser.
-// Selling prices don't change and market prices don't fluctuate much
-// for most items. This should still be updated periodically (TODO).
-var pricesTable
+let injectedXHR
+
+injectXHR()
+
+function injectXHR() {
+	if (injectedXHR) return;
+
+    // create script
+    let scr = document.createElement("script")
+    scr.setAttribute("type", "text/javascript")
+    scr.setAttribute("src", chrome.runtime.getURL("scripts/content/common/xhr-intercept.js"))
+
+    // inject into document
+	document.body.appendChild(scr)
+
+	injectedXHR = true
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,7 +56,7 @@ function sleep(ms) {
 // Builds the URL to fetch the icons. Supports as input:
 // candy, car, market, refresh, rifle, tools and piggy-bank
 function getIconURL(name) {
-    return browser.extension.getURL("resources/icons/"+name+"-icon.png");  
+    return chrome.runtime.getURL("resources/icons/"+name+"-icon.png")
 }
 
 async function requireElement(selector, maxRetries) {
@@ -75,20 +85,35 @@ async function requireNotElement(selector) {
     console.log("[TM+] waiting for dom element to not be present has failed all attempts (5s)")
 }
 
+function get(key) {
+    // Immediately return a promise and start asynchronous work
+    return new Promise((resolve) => {
+        // Asynchronously call
+        chrome.storage.local.get(key, (items) => {
+            resolve(items[key])
+        })
+    })
+}
+
+function set(object) {
+    return new Promise((resolve) => chrome.storage.local.set(object, () => resolve()))
+}
+
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
-    var storedObj = await browser.storage.local.get("apiKey")
-    if (!storedObj.apiKey) console.log("[TM+] api key not found")
+    var apiKey = await get("apiKey")
+    if (!apiKey) console.log("[TM+] api key not found")
     // TODO handle case where this is not found
 
-    var url = "https://api.torn.com/torn/?selections=items&key="+storedObj.apiKey
+    var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
     let response = await fetch(url)
     let data = await response.json()
     if (!data.items) return
 
     let pricesTable = new Map()
 
+    let count = 0
     // extract a map[item ID] -> {selling price, market price}
     Object.keys(data.items).forEach((key, index) => {
         pricesTable.set(
@@ -98,86 +123,52 @@ async function fetchItemsFromAPI () {
                 marketPrice: data.items[key].market_value
             }
         )
+        count++
     })
+
+    console.log(`[TM+] API request successful, got ${count} items`)
     return pricesTable
 }
 
 async function getPricesTable() {
-    // avoid fetching/retrieving the data if already done so
-    if (pricesTable) return pricesTable
-
-    var storedObj = await browser.storage.local.get("pricesTable")
-    if (!storedObj.pricesTable) {
-        pricesTable = await fetchItemsFromAPI()
-        if (typeof pricesTable === 'undefined') {
-            console.log("[TM+] failed to fetch items, aborting")
-            return
+    let pricesTableObj = await get("pricesTableObj")
+    if (typeof pricesTableObj !== 'undefined') {
+        let pricesTable = new Map(Object.entries(pricesTableObj))
+        if (pricesTable.size !== 0) {
+            console.log("[TM+] prices table fetched from storage. Size: " + pricesTable.size)
+            return pricesTable
         }
-        browser.storage.local.set({pricesTable})
-    } else {
-        pricesTable = storedObj.pricesTable
     }
+    
+    // background script failed to get data or didn't run in time?
+
+    let pricesTable = await fetchItemsFromAPI()
+    if (typeof pricesTable === 'undefined' || pricesTable.size === 0) {
+        console.log("[TM+] failed to fetch items, aborting")
+        return
+    }
+
+    pricesTableObj = Object.fromEntries(pricesTable)
+    set(pricesTableObj)
     return pricesTable
 }
 
 async function getMinProfit() {
-    var value
-    await browser.storage.local.get([
-        "minProfit",
-    ]).then(values => {
-        value = (values.minProfit) ? values.minProfit : defaultMinProfit
-    })
-    return value
+    var value = await get("minProfit")
+    return (value) ? value : defaultMinProfit
 }
 
 async function getMinPercentage() {
-    var value
-    await browser.storage.local.get([
-        "minPercentage",
-    ]).then(values => {
-        value = (values.minPercentage) ? values.minPercentage : defaultMinPercentage
-    })
-    return value
+    var value = await get("minPercentage")
+    return (value) ? value : defaultMinPercentage
 }
 
 async function getMinPiggyBankValue() {
-    var value
-    await browser.storage.local.get([
-        "minPiggyBankValue",
-    ]).then(values => {
-        value = (values.minPiggyBankValue) ? values.minPiggyBankValue : defaultMinPiggyBankValue
-    })
-    return value
+    var value = await get("minPiggyBankValue")
+    return (value) ? value : defaultMinPiggyBankValue
 }
 
 async function getMaxPiggyBankExpense() {
-    var value
-    await browser.storage.local.get([
-        "maxPiggyBankExpense",
-    ]).then(values => {
-        value = (values.maxPiggyBankExpense) ? values.maxPiggyBankExpense : defaultMaxPiggyBankExpense
-    })
-    return value
+    var value = await get("maxPiggyBankExpense")
+    return (value) ? value : defaultMaxPiggyBankExpense
 }
-
-function Mutex() {
-    let current = Promise.resolve()
-    this.lock = () => {
-        let _resolve
-        const p = new Promise(resolve => {
-            _resolve = () => resolve()
-        })
-        // Caller gets a promise that resolves when the current outstanding
-        // lock resolves
-        const rv = current.then(() => _resolve)
-        // Don't allow the next request until the new promise is done
-        current = p
-        // Return the new promise
-        return rv
-    }
-}
-
-// ensures the script runs one at a time. The background script can fire
-// multiple simultaneous instances of the content scripts
-const listingsScriptMutex = new Mutex();
-const marketScriptMutex = new Mutex();

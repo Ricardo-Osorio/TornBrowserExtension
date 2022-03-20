@@ -1,12 +1,12 @@
 "use strict"
 
-console.log("[TM+] market script started")
-
 // categories (from the market left side panel) where discount percentages will be shown
 var categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
 
 // categories (from the market left side panel) where reselling profit will be shown
 var categoriesWithResellingProfit = ["flowers", "plushies"]
+
+window.addEventListener("trigger-highlight", showHighlight)
 
 showHighlight()
 
@@ -15,8 +15,6 @@ async function showHighlight() {
         console.log("[TM+] market script matched listings page URL, aborting")
         return
     }
-
-    var unlock = await marketScriptMutex.lock()
     
     console.log("[TM+] market highlight script started")
 
@@ -30,12 +28,11 @@ async function showHighlight() {
     var earlyExit = document.querySelector("[aria-expanded='true'] > * .tmm-title-adjust")
     if (earlyExit) {
         console.log("[TM+] return early")
-        unlock()
         return
     }
 
     var pricesTable = await getPricesTable()
-    // TODO handle case where this fails
+    // TODO handle case where this fails?
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 
@@ -53,7 +50,6 @@ async function showHighlight() {
         var titleElement = item.querySelector(":scope > .title")
         if (titleElement.classList.contains("tmm-title-adjust")) {
             console.log("[TM+] return early")
-            unlock()
             return
         }
 
@@ -91,11 +87,11 @@ async function showHighlight() {
     }
 
     console.log("[TM+] done")
-    unlock()
 }
 
 // Decide if profit is within desired margin and build the node if needed.
 function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
+    // console.log(`[TM+] handleProfit: ${sellingPrice}, ${currentPrice}, ${desiredMinProfit}`)
     if (!sellingPrice) return // a few items don't have one, I.G. "Pillow"
 
     var profit = sellingPrice - currentPrice
@@ -113,6 +109,7 @@ function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
 
 // TODO value gain from selling at current market price
 function handleProfitResell(marketPrice, currentPrice, category) {
+    // console.log(`[TM+] handleProfitResell: ${marketPrice}, ${currentPrice}, ${category}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Pillow"
 
     if (!categoriesWithResellingProfit.includes(category)) return
@@ -134,6 +131,7 @@ function handleProfitResell(marketPrice, currentPrice, category) {
 // Decide if discount is within desired margin and build the node if needed.
 // Filters out categories not present in the `category` array.
 function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
+    // console.log(`[TM+] handleDiscount: ${marketPrice}, ${currentPrice}, ${category}, ${desiredMinPercentage}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
     if (!categoriesWithDiscounts.includes(category)) return
