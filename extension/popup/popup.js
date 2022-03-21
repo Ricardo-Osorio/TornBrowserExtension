@@ -1,11 +1,11 @@
 setInitialValues()
 
 async function setInitialValues() {
-    var apiKey = await get("apiKey")
-    var minProfit = await get("minProfit")
-    var minPercentage = await get("minPercentage")
-    var minPiggyBankValue = await get("minPiggyBankValue")
-    var maxPiggyBankExpense = await get("maxPiggyBankExpense")
+    let apiKey = await get("apiKey")
+    let minProfit = await get("minProfit")
+    let minPercentage = await get("minPercentage")
+    let minPiggyBankValue = await get("minPiggyBankValue")
+    let maxPiggyBankExpense = await get("maxPiggyBankExpense")
 
     if (!apiKey || apiKey === "") {
         console.log("no api key")
@@ -24,7 +24,7 @@ document.querySelector("#apikeybtn").addEventListener("click", setApiKey)
 document.querySelector("#valuesbtn").addEventListener("click", setConfigValues)
 
 async function setApiKey() {
-    var apiKey = document.querySelector("#apikey").value
+    let apiKey = document.querySelector("#apikey").value
     if (apiKey == "") {
         // invalid
     }
@@ -34,22 +34,22 @@ async function setApiKey() {
 
 async function setConfigValues() {
     console.log("setConfigValues")
-    var minProfit = document.querySelector("#minProfit").value
+    let minProfit = document.querySelector("#minProfit").value
     if (minProfit == "" || minProfit < 1) {
         // invalid
     }
 
-    var minPercentage = document.querySelector("#minPercentage").value
+    let minPercentage = document.querySelector("#minPercentage").value
     if (minPercentage == "" || minPercentage < 1) {
         // invalid
     }
 
-    var minPiggyBankValue = document.querySelector("#minPiggyBankValue").value
+    let minPiggyBankValue = document.querySelector("#minPiggyBankValue").value
     if (minPiggyBankValue == "" || minPiggyBankValue < 1) {
         // invalid
     }
 
-    var maxPiggyBankExpense = document.querySelector("#maxPiggyBankExpense").value
+    let maxPiggyBankExpense = document.querySelector("#maxPiggyBankExpense").value
     if (maxPiggyBankExpense == "" || maxPiggyBankExpense < 1) {
         // invalid
     }
