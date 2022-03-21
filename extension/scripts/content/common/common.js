@@ -57,9 +57,9 @@ function getIconURL(name) {
 }
 
 async function requireElement(selector, maxRetries) {
-    var attempt = 0
+    let attempt = 0
     while (attempt < maxRetries) { // 20 attempts = 5 sec
-        var element = document.querySelector(selector)
+        let element = document.querySelector(selector)
         if (element) return
 
         // console.log("[TM+] waiting for dom element to be present (250ms)")
@@ -70,9 +70,9 @@ async function requireElement(selector, maxRetries) {
 }
 
 async function requireNotElement(selector) {
-    var attempt = 0
+    let attempt = 0
     while (attempt < 20) { // max 5 sec
-        var element = document.querySelector(selector)
+        let element = document.querySelector(selector)
         if (!element) return
 
         // console.log("[TM+] waiting for dom element to not be present (250ms)")
@@ -99,13 +99,13 @@ function set(object) {
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
-    var apiKey = await get("apiKey")
+    let apiKey = await get("apiKey")
     if (!apiKey) {
         console.log("[TM+] api key not found")
         return
     }
 
-    var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
+    let url = "https://api.torn.com/torn/?selections=items&key="+apiKey
     let response = await fetch(url)
     let data = await response.json()
     if (!data.items) return
@@ -153,21 +153,21 @@ async function getPricesTable() {
 }
 
 async function getMinProfit() {
-    var value = await get("minProfit")
+    let value = await get("minProfit")
     return (value) ? value : defaultMinProfit
 }
 
 async function getMinPercentage() {
-    var value = await get("minPercentage")
+    let value = await get("minPercentage")
     return (value) ? value : defaultMinPercentage
 }
 
 async function getMinPiggyBankValue() {
-    var value = await get("minPiggyBankValue")
+    let value = await get("minPiggyBankValue")
     return (value) ? value : defaultMinPiggyBankValue
 }
 
 async function getMaxPiggyBankExpense() {
-    var value = await get("maxPiggyBankExpense")
+    let value = await get("maxPiggyBankExpense")
     return (value) ? value : defaultMaxPiggyBankExpense
 }

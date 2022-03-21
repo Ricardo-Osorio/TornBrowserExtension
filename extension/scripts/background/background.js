@@ -17,14 +17,14 @@ async function apiDataControlLoop() {
 
     let currentTs = Date.now()
 
-    var timestamp = await get("timestamp")
+    let timestamp = await get("timestamp")
     if (timestamp && currentTs - timestamp < msInMinute) {
         console.log("[TM+] less than a minute since last update")
         return
     }
 
     console.log("[TM+] more than a minute since last update")
-    var pricesTable = await fetchItemsFromAPI()
+    let pricesTable = await fetchItemsFromAPI()
     if (typeof pricesTable === 'undefined') {
         console.log("[TM+] failed to fetch items, aborting")
         return
@@ -37,14 +37,14 @@ async function apiDataControlLoop() {
 async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
-    var apiKey = await get("apiKey")
+    let apiKey = await get("apiKey")
     if (!apiKey) {
         console.log("[TM+] api key not found")
         return
     }
     // TODO handle case where this is not found
 
-    var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
+    let url = "https://api.torn.com/torn/?selections=items&key="+apiKey
     let response = await fetch(url)
     let data = await response.json()
     if (!data.items) return
