@@ -1,25 +1,24 @@
-/* .body {
-  min-width: 100px;
-} */
+.body {
+  min-width: 300px;
+}
 
 .input-small {
-    max-width: 30px;
+  max-width: 30px;
 }
 
 .input-normal {
-    max-width: 100px;
+  max-width: 100px;
 }
 
 .padding {
-    padding: 5px;
+  padding: 5px;
 }
 
-.input-bottom-button {
-    margin: auto;
-    width: 25%;
+.text-align-center {
+  text-align: center;
 }
 
-/* Chrome, Safari, Edge, Opera */
+/* Chrome */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="popup.css"/>
   </head>
 
-  <body>
+  <body class="body">
     <div id="popup-content">
         <div class="padding">
             API Key: <input type="text" id="apikey" placeholder="XXXXXXX">
@@ -24,8 +24,8 @@
         <div class="padding">
             Maximum piggy bank expense: <input type="number" id="maxPiggyBankExpense" placeholder="450" value="450" min="1" class="input-normal">
         </div>
-        <div>
-          <button id="valuesbtn" class="input-bottom-button" onclick="setConfigValues()">Set values</button>
+        <div class="text-align-center">
+          <button id="valuesbtn" onclick="setConfigValues()">Update values</button>
         </div>
     </div>
     <script src="popup.js"></script>
