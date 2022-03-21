@@ -11,12 +11,13 @@ window.addEventListener("trigger-highlight", showHighlight)
 showHighlight()
 
 async function showHighlight() {
-    if (regexListingsPage.test(location.href)) {
-        console.log("[TM+] market script matched listings page URL, aborting")
+    console.log("[TM+] market highlight script started")
+
+    let apiKey = await get("apiKey")
+    if (!apiKey) {
+        console.log("[TM+] api key not set, aborting")
         return
     }
-    
-    console.log("[TM+] market highlight script started")
 
     var desiredMinProfit = await getMinProfit()
     var desiredMinPercentage = await getMinPercentage()
@@ -32,7 +33,7 @@ async function showHighlight() {
     }
 
     var pricesTable = await getPricesTable()
-    // TODO handle case where this fails?
+    // TODO handle case where this fails
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 

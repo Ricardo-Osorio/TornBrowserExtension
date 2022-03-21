@@ -13,9 +13,6 @@ const defaultMinPiggyBankValue = 20000
 // goal of storing money away
 const defaultMaxPiggyBankExpense = 450
 
-const regexListingsPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=your.*")
-const regexMarketPage = new RegExp("^https:\/\/www\.torn\.com\/imarket\.php#\/p=market.*")
-
 // Market category names on the market side panel don't exactly match the ones from the
 // api. This map helps with that, mapping the UI name into what to expect from the API
 // const categoriesMap = new Map(
@@ -103,8 +100,10 @@ async function fetchItemsFromAPI () {
     console.log("[TM+] fetching item list from API")
 
     var apiKey = await get("apiKey")
-    if (!apiKey) console.log("[TM+] api key not found")
-    // TODO handle case where this is not found
+    if (!apiKey) {
+        console.log("[TM+] api key not found")
+        return
+    }
 
     var url = "https://api.torn.com/torn/?selections=items&key="+apiKey
     let response = await fetch(url)

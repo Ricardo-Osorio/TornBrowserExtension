@@ -7,6 +7,12 @@ saveBazaar()
 async function showHighlight() {
     console.log("[TM+] bazaar highlight script started")
 
+    let apiKey = await get("apiKey")
+    if (!apiKey) {
+        console.log("[TM+] api key not set, aborting")
+        return
+    }
+
     var pricesTable = await getPricesTable()
     // TODO handle case where this fails
 
