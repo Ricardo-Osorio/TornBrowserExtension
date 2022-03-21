@@ -36,6 +36,11 @@ async function showHighlight() {
         // with the profit amount will now be present thus why we need the split() here
         currentPrice = Number(currentPrice.split("$")[1].replaceAll(",",""))
 
+        // items selling for 1$ at bazaars are locked for everyone
+        if (currentPrice === 1) {
+            continue
+        }
+
         // item fetched from Torn API
         let apiItem = pricesTable.get(itemID)
 
@@ -170,6 +175,11 @@ async function handleNewRow(pricesTable, newRow) {
 
         let currentPrice = item.querySelector(":scope > div p ~ p").lastChild.data
         currentPrice = Number(currentPrice.replaceAll(',',''))
+
+        // items selling for 1$ at bazaars are locked for everyone
+        if (currentPrice === 1) {
+            continue
+        }
 
         // let name = item.querySelector(":scope > div .imgBar___RwG9v").getAttribute("aria-label")
         // console.log(`[TM+] processing item ${name} selling for ${currentPrice}`)
