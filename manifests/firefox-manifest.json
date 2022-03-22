@@ -32,7 +32,7 @@
         "https://www.torn.com/bigalgunshop.php"
       ],
       "js": [
-        "scripts/content/common/common.js",
+        "scripts/content/utils/utils.js",
         "scripts/content/sidebar/bar.js"
       ],
       "css": ["scripts/content/sidebar/bar.css"],
@@ -41,9 +41,10 @@
     {
       "matches": ["https://www.torn.com/imarket.php*"],
       "js": [
-        "scripts/content/common/common.js",
+        "scripts/content/utils/utils.js",
         "scripts/content/sidebar/bar.js",
-        "scripts/content/market/highlight.js"
+        "scripts/content/market/highlight.js",
+        "scripts/content/listings/update.js"
       ],
       "css": [
         "scripts/content/sidebar/bar.css",
@@ -54,7 +55,7 @@
     {
       "matches": ["https://www.torn.com/bazaar.php?userId=*"],
       "js": [
-        "scripts/content/common/common.js",
+        "scripts/content/utils/utils.js",
         "scripts/content/sidebar/bar.js",
         "scripts/content/bazaar/highlight.js"
       ],
