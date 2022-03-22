@@ -6,7 +6,6 @@
   "author": "Ricardo Osorio - BOTLoki [2742316]",
   "permissions": [
     "storage",
-    "webRequest",
     "alarms",
     "https://www.torn.com/*",
     "https://api.torn.com/*"

@@ -6,7 +6,6 @@
   "author": "Ricardo Osorio - BOTLoki [2742316]",
   "permissions": [
     "storage",
-    "webRequest",
     "alarms"
   ],
   "host_permissions": [
