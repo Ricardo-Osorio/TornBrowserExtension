@@ -28,22 +28,22 @@ const defaultMaxPiggyBankExpense = 450
 //     ["special-items", "Special"],
 // )
 
-let injectedXHR
-
 injectXHR()
 
 function injectXHR() {
-	if (injectedXHR) return;
+	let found = document.querySelector("script[src$='intercept/xhr-requests.js']")
+    if (found) {
+        console.log("[TM+] prevented injecting script twice")
+        return
+    }
 
     // create script
     let scr = document.createElement("script")
     scr.setAttribute("type", "text/javascript")
-    scr.setAttribute("src", chrome.runtime.getURL("scripts/content/common/xhr-intercept.js"))
+    scr.setAttribute("src", chrome.runtime.getURL("scripts/content/intercept/xhr-requests.js"))
 
-    // inject into document
+    // inject script into document
 	document.body.appendChild(scr)
-
-	injectedXHR = true
 }
 
 function sleep(ms) {
@@ -139,7 +139,8 @@ async function getPricesTable() {
         }
     }
     
-    // background script failed to get data or didn't run in time?
+    // background script failed to get data or didn't run in time
+    // so we get it ourselves
 
     let pricesTable = await fetchItemsFromAPI()
     if (typeof pricesTable === 'undefined' || pricesTable.size === 0) {
