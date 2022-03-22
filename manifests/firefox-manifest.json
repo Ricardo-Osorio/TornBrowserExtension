@@ -43,7 +43,8 @@
       "js": [
         "scripts/content/utils/utils.js",
         "scripts/content/sidebar/bar.js",
-        "scripts/content/market/highlight.js"
+        "scripts/content/market/highlight.js",
+        "scripts/content/listings/update.js"
       ],
       "css": [
         "scripts/content/sidebar/bar.css",
