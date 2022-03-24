@@ -1,32 +1,19 @@
 "use strict"
 
-// Minimum amount of profit necessary to show the highlight and value you would
-// get from buying and then reselling that item
+// Minimum profit from reselling the item on the NPC stores to show highlights
 const defaultMinProfit = 450
-// TODO
+// Minimum profit from reselling the item on the market to show highlights 
 const defaultMinProfitResell = 200
-// Minimum percentage necessary to show the discount element over an item
+// Minimum percentage to show the sale icon over an item
 const defaultMinPercentage = 25
 // Minimum value of an item necessary to consider showing the piggy bank icon
 const defaultMinPiggyBankValue = 20000
-// Maximum amount you're willing to overpay for an item when doing so with the
-// goal of storing money away
+// Maximum amount you're willing to overpay for an item when storing away money
 const defaultMaxPiggyBankExpense = 450
-
-// Market category names on the market side panel don't exactly match the ones from the
-// api. This map helps with that, mapping the UI name into what to expect from the API
-// const categoriesMap = new Map(
-//     ["medical-items", "Medical"],
-//     ["temporary-items", "Temporary"],
-//     ["energy-drinks", "Energy Drink"],
-//     ["candy", "Drug"],
-//     ["enhancers", "Enhancer"],
-//     ["alcohol", "Alcohol"],
-//     ["flowers", "Flower"],
-//     ["clothing", "Clothing"],
-//     ["plushies", "Plushie"],
-//     ["special-items", "Special"],
-// )
+// Categories where discount percentages will be shown
+const categoriesWithDiscounts = ["Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Temporary", "Medical", "Enhancer", "Clothing", "Special", "Candy"]
+// Categories where reselling profit will be shown
+const categoriesWithResellingProfit = ["Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Candy"]
 
 injectXHR()
 
@@ -119,7 +106,8 @@ async function fetchItemsFromAPI () {
             key, 
             {
                 price: data.items[key].sell_price,
-                marketPrice: data.items[key].market_value
+                marketPrice: data.items[key].market_value,
+                category: data.items[key].type
             }
         )
         count++
@@ -134,7 +122,7 @@ async function getPricesTable() {
     if (typeof pricesTableObj !== 'undefined') {
         let pricesTable = new Map(Object.entries(pricesTableObj))
         if (pricesTable.size !== 0) {
-            console.log("[TM+] prices table fetched from storage. Size: " + pricesTable.size)
+            // console.log("[TM+] prices table fetched from storage. Size: " + pricesTable.size)
             return pricesTable
         }
     }
@@ -149,7 +137,7 @@ async function getPricesTable() {
     }
 
     pricesTableObj = Object.fromEntries(pricesTable)
-    set(pricesTableObj)
+    set({pricesTableObj})
     return pricesTable
 }
 

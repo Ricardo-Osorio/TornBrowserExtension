@@ -58,7 +58,8 @@ async function fetchItemsFromAPI () {
             key, 
             {
                 price: data.items[key].sell_price,
-                marketPrice: data.items[key].market_value
+                marketPrice: data.items[key].market_value,
+                category: data.items[key].type
             }
         )
         count++

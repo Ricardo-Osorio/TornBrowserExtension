@@ -9,7 +9,6 @@ Product in early stages of development and I will continue working on it for as 
 </a>
 
 ## Overview
-
 Having a player driven economy, products can be found selling at a wide range of prices every day, so finding the best prices is no easy task.
 
 Hence why I have transformed pages like the market to give you all the information you need:
@@ -19,7 +18,6 @@ Hence why I have transformed pages like the market to give you all the informati
 </p>
 
 ## Features
-
 You will now immediately see:
 
 - **Items on sale** - displays an icon with how much cheaper (%) an item is compared to its current market price.
@@ -37,7 +35,6 @@ Updating the price of an item listed on the market will repeat that action for a
 Also add a sidebar to help navigate between stores (market, NPC, last visited bazaar, ...) with one click.
 
 ## Customization
-
 The browser popup is used to set the API key (required) and customize parameters to your liking:
 - **Minimum profit** - Minimum profit amount to display the highlight and profit on items
 - **Minimum sale (%)** - Minimum profit percentage to display the highlight and icon on items

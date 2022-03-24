@@ -1,11 +1,5 @@
 "use strict"
 
-// categories (from the market left side panel) where discount percentages will be shown
-let categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
-
-// categories (from the market left side panel) where reselling profit will be shown
-let categoriesWithResellingProfit = ["flowers", "plushies"]
-
 window.addEventListener("refresh-market-highlight", showHighlight)
 
 showHighlight()
@@ -37,7 +31,7 @@ async function showHighlight() {
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 
-    let category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-cat")
+    let category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-type")
 
     for (let item of document.querySelectorAll(".item-market-wrap div[aria-expanded='true'] li[data-item]")) {
         const itemID = item.children[0].getAttribute("itemid")

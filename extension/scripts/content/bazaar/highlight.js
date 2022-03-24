@@ -4,6 +4,11 @@ showHighlight()
 listenForChanges()
 saveBazaar()
 
+function saveBazaar() {
+    let lastBazaar = window.location.href
+    set({lastBazaar})
+}
+
 async function showHighlight() {
     console.log("[TM+] bazaar highlight script started")
 
@@ -51,6 +56,9 @@ async function showHighlight() {
             continue
         }
 
+        // TODO use when the handleProfitResell is added
+        // if (!categoriesWithResellingProfit.includes(apiItem.category)) continue
+
         let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
         if (profitElement) {
             item.classList.add("tmm-highlight")
@@ -93,9 +101,10 @@ function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
 // Decide if discount is within desired margin and build the node if needed.
 // Filters out categories not present in the `category` array.
 function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
+    if (!categoriesWithDiscounts.includes(category)) return
+
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
-    // if (!categoriesWithDiscounts.includes(category)) return
     let discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
     if (discountPercentage < desiredMinPercentage) return
 
@@ -208,9 +217,4 @@ async function handleNewRow(pricesTable, newRow) {
             wrapper.appendChild(piggyBankElement)
         }
     }
-}
-
-function saveBazaar() {
-    let lastBazaar = window.location.href
-    set({lastBazaar})
 }
