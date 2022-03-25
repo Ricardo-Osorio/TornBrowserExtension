@@ -10,10 +10,8 @@ const defaultMinPercentage = 25
 const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when storing away money
 const defaultMaxPiggyBankExpense = 450
-// Categories where discount percentages will be shown
-const categoriesWithDiscounts = ["Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Temporary", "Medical", "Enhancer", "Clothing", "Special", "Candy"]
-// Categories where reselling profit will be shown
-const categoriesWithResellingProfit = ["Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Candy"]
+// Categories where discount percentages are shown
+const categoriesWithDiscounts = ["Melee", "Primary", "Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Temporary", "Medical", "Enhancer", "Clothing", "special", "Candy"]
 
 injectXHR()
 
@@ -115,6 +113,44 @@ async function fetchItemsFromAPI () {
 
     console.log(`[TM+] API request successful, got ${count} items`)
     return pricesTable
+}
+
+async function getCategorySettings() {
+    let categorySettingsObj = await get("categorySettingsObj")
+    if (typeof categorySettingsObj !== 'undefined') {
+        let categorySettings = new Map(Object.entries(categorySettingsObj))
+        if (categorySettings.size !== 0) {
+            return categorySettings
+        }
+    }
+
+    // default values
+    let categorySettings = new Map()
+    categorySettings.set("Melee", {npc: true, market: false})
+    categorySettings.set("Primary", {npc: true, market: false})
+    categorySettings.set("Secondary", {npc: true, market: false})
+    categorySettings.set("Defensive", {npc: true, market: false})
+    categorySettings.set("Medical", {npc: true, market: true})
+    categorySettings.set("Temporary", {npc: true, market: false})
+    categorySettings.set("Energy", {npc: true, market: true})
+    categorySettings.set("Candy", {npc: true, market: true})
+    categorySettings.set("Drug", {npc: true, market: true})
+    categorySettings.set("Enhancer", {npc: true, market: false})
+    categorySettings.set("Alcohol", {npc: true, market: true})
+    categorySettings.set("Booster", {npc: true, market: false})
+    categorySettings.set("Electronic", {npc: true, market: false})
+    categorySettings.set("Jewelry", {npc: true, market: false})
+    categorySettings.set("Virus", {npc: true, market: false})
+    categorySettings.set("Flower", {npc: true, market: true})
+    categorySettings.set("Supply Pack", {npc: true, market: false})
+    categorySettings.set("Collectible", {npc: true, market: false})
+    categorySettings.set("Clothing", {npc: true, market: false})
+    categorySettings.set("Car", {npc: true, market: false})
+    categorySettings.set("Artifact", {npc: true, market: false})
+    categorySettings.set("Plushie", {npc: true, market: true})
+    categorySettings.set("Special", {npc: true, market: false})
+    categorySettings.set("Other", {npc: true, market: false})
+    return categorySettings
 }
 
 async function getPricesTable() {
