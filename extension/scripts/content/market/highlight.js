@@ -32,8 +32,6 @@ async function showHighlight() {
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
 
-    let category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-type")
-
     for (let item of document.querySelectorAll(".item-market-wrap div[aria-expanded='true'] li[data-item]")) {
         const itemID = item.children[0].getAttribute("itemid")
         
@@ -55,7 +53,7 @@ async function showHighlight() {
         let wrapperElement = document.createElement("div")
         wrapperElement.classList.add("tmm-wrapper")
 
-        if (categorySettings.get(apiItem.category).npc) {
+        if (categorySettings.get(apiItem.category).shop) {
             let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
             if (profitElement) {
                 wrapperElement.appendChild(profitElement)
@@ -73,10 +71,12 @@ async function showHighlight() {
             }
         }
 
-        let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, category, desiredMinPercentage)
-        if (discountElement) {
-            let wrapper = item.querySelector(":scope .qty-wrap")
-            wrapper.appendChild(discountElement)
+        if (categorySettings.get(apiItem.category).sale) {
+            let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, desiredMinPercentage)
+            if (discountElement) {
+                let wrapper = item.querySelector(":scope .qty-wrap")
+                wrapper.appendChild(discountElement)
+            }
         }
 
         let piggyBankElement = handlePiggyBank(apiItem.price, currentPrice, desiredMinPiggyBank, desiredMaxPiggyBankExpense)
@@ -127,12 +127,9 @@ function handleProfitResell(marketPrice, currentPrice) {
 }
 
 // Decide if discount is within desired margin and build the node if needed.
-// Filters out categories not present in the `category` array.
-function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
+function handleDiscount(marketPrice, currentPrice, desiredMinPercentage) {
     // console.log(`[TM+] handleDiscount: ${marketPrice}, ${currentPrice}, ${category}, ${desiredMinPercentage}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
-
-    if (!categoriesWithDiscounts.includes(category)) return
     
     let discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
     if (discountPercentage < desiredMinPercentage) return

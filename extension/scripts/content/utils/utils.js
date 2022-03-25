@@ -10,8 +10,6 @@ const defaultMinPercentage = 25
 const defaultMinPiggyBankValue = 20000
 // Maximum amount you're willing to overpay for an item when storing away money
 const defaultMaxPiggyBankExpense = 450
-// Categories where discount percentages are shown
-const categoriesWithDiscounts = ["Melee", "Primary", "Flower", "Plushie", "Drug", "Alcohol", "Energy Drink", "Temporary", "Medical", "Enhancer", "Clothing", "special", "Candy"]
 
 injectXHR()
 
@@ -126,30 +124,30 @@ async function getCategorySettings() {
 
     // default values
     let categorySettings = new Map()
-    categorySettings.set("Melee", {npc: true, market: false})
-    categorySettings.set("Primary", {npc: true, market: false})
-    categorySettings.set("Secondary", {npc: true, market: false})
-    categorySettings.set("Defensive", {npc: true, market: false})
-    categorySettings.set("Medical", {npc: true, market: true})
-    categorySettings.set("Temporary", {npc: true, market: false})
-    categorySettings.set("Energy", {npc: true, market: true})
-    categorySettings.set("Candy", {npc: true, market: true})
-    categorySettings.set("Drug", {npc: true, market: true})
-    categorySettings.set("Enhancer", {npc: true, market: false})
-    categorySettings.set("Alcohol", {npc: true, market: true})
-    categorySettings.set("Booster", {npc: true, market: false})
-    categorySettings.set("Electronic", {npc: true, market: false})
-    categorySettings.set("Jewelry", {npc: true, market: false})
-    categorySettings.set("Virus", {npc: true, market: false})
-    categorySettings.set("Flower", {npc: true, market: true})
-    categorySettings.set("Supply Pack", {npc: true, market: false})
-    categorySettings.set("Collectible", {npc: true, market: false})
-    categorySettings.set("Clothing", {npc: true, market: false})
-    categorySettings.set("Car", {npc: true, market: false})
-    categorySettings.set("Artifact", {npc: true, market: false})
-    categorySettings.set("Plushie", {npc: true, market: true})
-    categorySettings.set("Special", {npc: true, market: false})
-    categorySettings.set("Other", {npc: true, market: false})
+    categorySettings.set("Melee", {shop: true, market: false, sale: false})
+    categorySettings.set("Primary", {shop: true, market: false, sale: false})
+    categorySettings.set("Secondary", {shop: true, market: false, sale: false})
+    categorySettings.set("Defensive", {shop: true, market: false, sale: false})
+    categorySettings.set("Medical", {shop: true, market: true, sale: false})
+    categorySettings.set("Temporary", {shop: true, market: false, sale: false})
+    categorySettings.set("Energy Drink", {shop: true, market: true, sale: false})
+    categorySettings.set("Candy", {shop: true, market: true, sale: false})
+    categorySettings.set("Drug", {shop: true, market: true, sale: false})
+    categorySettings.set("Enhancer", {shop: true, market: false, sale: false})
+    categorySettings.set("Alcohol", {shop: true, market: true, sale: false})
+    categorySettings.set("Booster", {shop: true, market: false, sale: false})
+    categorySettings.set("Electronic", {shop: true, market: false, sale: false})
+    categorySettings.set("Jewelry", {shop: true, market: false, sale: false})
+    categorySettings.set("Virus", {shop: true, market: false, sale: false})
+    categorySettings.set("Flower", {shop: true, market: true, sale: false})
+    categorySettings.set("Supply Pack", {shop: true, market: false, sale: false})
+    categorySettings.set("Collectible", {shop: true, market: false, sale: false})
+    categorySettings.set("Clothing", {shop: true, market: false, sale: false})
+    categorySettings.set("Car", {shop: true, market: false, sale: false})
+    categorySettings.set("Artifact", {shop: true, market: false, sale: false})
+    categorySettings.set("Plushie", {shop: true, market: true, sale: false})
+    categorySettings.set("Special", {shop: true, market: false, sale: false})
+    categorySettings.set("Other", {shop: true, market: false, sale: false})
     return categorySettings
 }
 

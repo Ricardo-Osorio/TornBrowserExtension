@@ -29,151 +29,177 @@
           <div class="padding">
               Maximum piggy bank expense: <input type="number" id="maxPiggyBankExpense" placeholder="450" value="450" min="1" class="input-normal">
           </div>
-          <div class="text-align-center">
+          <div class="update-buttons">
             <button id="valuesbtn">Update values</button>
           </div>
 
         </div>
 
         <!-- Category selection options -->
-        <button type="button" class="collapsible">Category selection</button>
+        <button type="button" class="collapsible">Category settings</button>
         <div class="content">
 
-          <p style="color: green;margin: 5px;">R. NPC - Profit reselling to NPC shops</p>
-          <p style="color: red;margin: 5px;">R. Market - Profit reselling in the Market</p>
+          <p style="color: green;margin: 5px;">Shops - Profit reselling to NPC shops</p>
+          <p style="color: red;margin: 5px;">Market - Profit reselling in the Market</p>
+          <p style="margin: 5px;">Sales - Items for sale</p>
 
-          <table style="width:100%;">
+          <table style="width: 97%;margin-left: 4px;">
             <thead>
               <tr>
-                <th style="color: green;">R. NPC</th>
-                <th style="color: red;">R. Market</th>
                 <th>Category</th>
+                <th style="color: green;">Shops</th>
+                <th style="color: red;">Market</th>
+                <th>Sales</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Melee"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Melee"></td>
                 <td>Melee Weapon</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Melee"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Melee"></td>
+                <td><input type="checkbox" name="sale_option" value="Melee"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Primary"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Primary"></td>
                 <td>Primary Weapon</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Primary"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Primary"></td>
+                <td><input type="checkbox" name="sale_option" value="Primary"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Secondary"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Secondary"></td>
                 <td>Secondary Weapon</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Secondary"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Secondary"></td>
+                <td><input type="checkbox" name="sale_option" value="Secondary"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Defensive"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Defensive"></td>
                 <td>Armor</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Defensive"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Defensive"></td>
+                <td><input type="checkbox" name="sale_option" value="Defensive"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Medical"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Medical"></td>
                 <td>Medical Items</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Medical"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Medical"></td>
+                <td><input type="checkbox" name="sale_option" value="Medical"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Temporary"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Temporary"></td>
                 <td>Temporary Items</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Temporary"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Temporary"></td>
+                <td><input type="checkbox" name="sale_option" value="Temporary"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Energy"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Energy"></td>
                 <td>Energy Drinks</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Energy Drink"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Energy Drink"></td>
+                <td><input type="checkbox" name="sale_option" value="Energy Drink"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Candy"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Candy"></td>
                 <td>Candy</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Candy"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Candy"></td>
+                <td><input type="checkbox" name="sale_option" value="Candy"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Drug"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Drug"></td>
                 <td>Drugs</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Drug"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Drug"></td>
+                <td><input type="checkbox" name="sale_option" value="Drug"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Enhancer"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Enhancer"></td>
                 <td>Enhancers</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Enhancer"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Enhancer"></td>
+                <td><input type="checkbox" name="sale_option" value="Enhancer"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Alcohol"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Alcohol"></td>
                 <td>Alcohol</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Alcohol"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Alcohol"></td>
+                <td><input type="checkbox" name="sale_option" value="Alcohol"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Booster"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Booster"></td>
                 <td>Other Boosters</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Booster"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Booster"></td>
+                <td><input type="checkbox" name="sale_option" value="Booster"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Electronic"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Electronic"></td>
                 <td>Electronics</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Electronic"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Electronic"></td>
+                <td><input type="checkbox" name="sale_option" value="Electronic"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Jewelry"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Jewelry"></td>
                 <td>Jewelry</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Jewelry"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Jewelry"></td>
+                <td><input type="checkbox" name="sale_option" value="Jewelry"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Virus"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Virus"></td>
                 <td>Viruses</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Virus"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Virus"></td>
+                <td><input type="checkbox" name="sale_option" value="Virus"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Flower"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Flower"></td>
                 <td>Flowers</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Flower"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Flower"></td>
+                <td><input type="checkbox" name="sale_option" value="Flower"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Supply Pack"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Supply Pack"></td>
                 <td>Supply Packs</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Supply Pack"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Supply Pack"></td>
+                <td><input type="checkbox" name="sale_option" value="Supply Pack"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Collectible"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Collectible"></td>
                 <td>Collectibles</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Collectible"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Collectible"></td>
+                <td><input type="checkbox" name="sale_option" value="Collectible"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Clothing"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Clothing"></td>
                 <td>Clothing</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Clothing"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Clothing"></td>
+                <td><input type="checkbox" name="sale_option" value="Clothing"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Car"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Car"></td>
                 <td>Cars</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Car"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Car"></td>
+                <td><input type="checkbox" name="sale_option" value="Car"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Artifact"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Artifact"></td>
                 <td>Artifacts</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Artifact"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Artifact"></td>
+                <td><input type="checkbox" name="sale_option" value="Artifact"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Plushie"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Plushie"></td>
                 <td>Plushies</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Plushie"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Plushie"></td>
+                <td><input type="checkbox" name="sale_option" value="Plushie"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Special"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Special"></td>
                 <td>Special Items</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Special"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Special"></td>
+                <td><input type="checkbox" name="sale_option" value="Special"></td>
               </tr>
               <tr>
-                <td><input type="checkbox" name="resell_npc_option" value="Other"></td>
-                <td><input type="checkbox" name="resell_market_option" value="Other"></td>
                 <td>Miscellaneous</td>
+                <td><input type="checkbox" name="resell_shops_option" value="Other"></td>
+                <td><input type="checkbox" name="resell_market_option" value="Other"></td>
+                <td><input type="checkbox" name="sale_option" value="Other"></td>
               </tr>
             </tbody>
           </table>
-          <div class="text-align-center">
+          <div class="update-buttons">
             <button id="settingsbtn">Update settings</button>
           </div>
 

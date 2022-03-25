@@ -35,30 +35,30 @@ async function setInitialValues() {
     } else {
         // default values
         let categorySettings = new Map()
-        categorySettings.set("Melee", {npc: true, market: false})
-        categorySettings.set("Primary", {npc: true, market: false})
-        categorySettings.set("Secondary", {npc: true, market: false})
-        categorySettings.set("Defensive", {npc: true, market: false})
-        categorySettings.set("Medical", {npc: true, market: true})
-        categorySettings.set("Temporary", {npc: true, market: false})
-        categorySettings.set("Energy", {npc: true, market: true})
-        categorySettings.set("Candy", {npc: true, market: true})
-        categorySettings.set("Drug", {npc: true, market: true})
-        categorySettings.set("Enhancer", {npc: true, market: false})
-        categorySettings.set("Alcohol", {npc: true, market: true})
-        categorySettings.set("Booster", {npc: true, market: false})
-        categorySettings.set("Electronic", {npc: true, market: false})
-        categorySettings.set("Jewelry", {npc: true, market: false})
-        categorySettings.set("Virus", {npc: true, market: false})
-        categorySettings.set("Flower", {npc: true, market: true})
-        categorySettings.set("Supply Pack", {npc: true, market: false})
-        categorySettings.set("Collectible", {npc: true, market: false})
-        categorySettings.set("Clothing", {npc: true, market: false})
-        categorySettings.set("Car", {npc: true, market: false})
-        categorySettings.set("Artifact", {npc: true, market: false})
-        categorySettings.set("Plushie", {npc: true, market: true})
-        categorySettings.set("Special", {npc: true, market: false})
-        categorySettings.set("Other", {npc: true, market: false})
+        categorySettings.set("Melee", {shop: true, market: false, sale: false})
+        categorySettings.set("Primary", {shop: true, market: false, sale: false})
+        categorySettings.set("Secondary", {shop: true, market: false, sale: false})
+        categorySettings.set("Defensive", {shop: true, market: false, sale: false})
+        categorySettings.set("Medical", {shop: true, market: true, sale: false})
+        categorySettings.set("Temporary", {shop: true, market: false, sale: false})
+        categorySettings.set("Energy Drink", {shop: true, market: true, sale: false})
+        categorySettings.set("Candy", {shop: true, market: true, sale: false})
+        categorySettings.set("Drug", {shop: true, market: true, sale: false})
+        categorySettings.set("Enhancer", {shop: true, market: false, sale: false})
+        categorySettings.set("Alcohol", {shop: true, market: true, sale: false})
+        categorySettings.set("Booster", {shop: true, market: false, sale: false})
+        categorySettings.set("Electronic", {shop: true, market: false, sale: false})
+        categorySettings.set("Jewelry", {shop: true, market: false, sale: false})
+        categorySettings.set("Virus", {shop: true, market: false, sale: false})
+        categorySettings.set("Flower", {shop: true, market: true, sale: false})
+        categorySettings.set("Supply Pack", {shop: true, market: false, sale: false})
+        categorySettings.set("Collectible", {shop: true, market: false, sale: false})
+        categorySettings.set("Clothing", {shop: true, market: false, sale: false})
+        categorySettings.set("Car", {shop: true, market: false, sale: false})
+        categorySettings.set("Artifact", {shop: true, market: false, sale: false})
+        categorySettings.set("Plushie", {shop: true, market: true, sale: false})
+        categorySettings.set("Special", {shop: true, market: false, sale: false})
+        categorySettings.set("Other", {shop: true, market: false, sale: false})
         RestoreCategorySettings(categorySettings)
     }
 
@@ -117,16 +117,22 @@ function SetConfigValues() {
 }
 
 function RestoreCategorySettings(categorySettings) {
-    let checkboxes = document.getElementsByName("resell_npc_option")
+    let checkboxes = document.getElementsByName("resell_shops_option")
     for(let i = 0; i < checkboxes.length; i++) {
-        let categorySetting = categorySettings.get(checkboxes[i].value)
-        if (categorySetting.npc) checkboxes[i].checked = true
+        let setting = categorySettings.get(checkboxes[i].value)
+        if (setting.shop) checkboxes[i].checked = true
     }
 
     checkboxes = document.getElementsByName("resell_market_option")
     for(let i = 0; i < checkboxes.length; i++) {
-        let categorySetting = categorySettings.get(checkboxes[i].value)
-        if (categorySetting.market) checkboxes[i].checked = true
+        let setting = categorySettings.get(checkboxes[i].value)
+        if (setting.market) checkboxes[i].checked = true
+    }
+
+    checkboxes = document.getElementsByName("sale_option")
+    for(let i = 0; i < checkboxes.length; i++) {
+        let setting = categorySettings.get(checkboxes[i].value)
+        if (setting.sale) checkboxes[i].checked = true
     }
 }
 
@@ -134,17 +140,24 @@ function UpdateCategorySettings() {
     // build map from category into {npc,market} obj representing intention
     let categorySettings = new Map()
 
-    let checkboxes = document.getElementsByName("resell_npc_option")
+    let checkboxes = document.getElementsByName("resell_shops_option")
     for(let i = 0; i < checkboxes.length; i++) {
-        let categorySetting = {npc: checkboxes[i].checked}
-        categorySettings.set(checkboxes[i].value, categorySetting)
+        let setting = {shop: checkboxes[i].checked}
+        categorySettings.set(checkboxes[i].value, setting)
     }
 
     checkboxes = document.getElementsByName("resell_market_option")
     for(let i = 0; i < checkboxes.length; i++) {
-        let categorySetting = categorySettings.get(checkboxes[i].value)
-        categorySetting.market = checkboxes[i].checked
-        categorySettings.set(checkboxes[i].value, categorySetting)
+        let setting = categorySettings.get(checkboxes[i].value)
+        setting.market = checkboxes[i].checked
+        categorySettings.set(checkboxes[i].value, setting)
+    }
+
+    checkboxes = document.getElementsByName("sale_option")
+    for(let i = 0; i < checkboxes.length; i++) {
+        let setting = categorySettings.get(checkboxes[i].value)
+        setting.sale = checkboxes[i].checked
+        categorySettings.set(checkboxes[i].value, setting)
     }
 
     categorySettingsObj = Object.fromEntries(categorySettings)

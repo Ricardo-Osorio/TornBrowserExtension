@@ -13,7 +13,12 @@
   padding: 5px;
 }
 
-.text-align-center {
+.update-buttons {
+  text-align: center;
+  margin: 5px;
+}
+
+.align-center {
   text-align: center;
 }
 
@@ -32,14 +37,15 @@ input[type=number] {
 /* collapsible elements */
 .collapsible {
   background-color: #eee;
-  color: #444;
+  color: rgb(44, 44, 44);
   cursor: pointer;
   padding: 2px 5px;
   width: 100%;
-  border: none;
+  border: 2px solid #838383;
   text-align: left;
   outline: none;
   font-size: 15px;
+  margin-top: 2px;
 }
 .active, .collapsible:hover {
   background-color: #ccc;
@@ -48,6 +54,8 @@ input[type=number] {
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
+  margin-bottom: 2px;
+  border: 1px solid #525252;
 }
 .collapsible:after {
   content: '\02795'; /* Unicode character for "plus" sign (+) */
@@ -64,4 +72,5 @@ input[type=number] {
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
+  text-align: center;
 }

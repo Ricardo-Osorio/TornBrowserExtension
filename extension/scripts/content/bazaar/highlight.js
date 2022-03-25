@@ -19,7 +19,8 @@ async function showHighlight() {
     }
 
     let pricesTable = await getPricesTable()
-    // TODO handle case where this fails
+    
+    let categorySettings = await getCategorySettings()
 
     let desiredMinProfit = await getMinProfit()
     let desiredMinPercentage = await getMinPercentage()
@@ -56,26 +57,27 @@ async function showHighlight() {
             continue
         }
 
-        // TODO use when the handleProfitResell is added
-        // if (!categoriesWithResellingProfit.includes(apiItem.category)) continue
-
-        let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
-        if (profitElement) {
-            item.classList.add("tmm-highlight")
-
-            let priceElement = item.querySelector(":scope > div .price___zTGNJ")
-            priceElement.classList.add("tmm-flex-with-space")
-            priceElement.appendChild(profitElement)
+        if (categorySettings.get(apiItem.category).shop) {
+            let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
+            if (profitElement) {
+                item.classList.add("tmm-highlight")
+    
+                let priceElement = item.querySelector(":scope > div .price___zTGNJ")
+                priceElement.classList.add("tmm-flex-with-space")
+                priceElement.appendChild(profitElement)
+            }
         }
 
-        let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, "category", desiredMinPercentage)
-        if (discountElement) {
-            let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
-            wrapper.appendChild(discountElement)
+        if (categorySettings.get(apiItem.category).sale) {
+            let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, desiredMinPercentage)
+            if (discountElement) {
+                let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
+                wrapper.appendChild(discountElement)
+            }
         }
 
         let piggyBankElement = handlePiggyBank(apiItem.price, currentPrice, desiredMinPiggyBank, desiredMaxPiggyBankExpense)
-        if (piggyBankElement && !profitElement) {
+        if (piggyBankElement && typeof profitElement === 'undefined') { // mutual exclusive
             let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
             wrapper.appendChild(piggyBankElement)
         }
@@ -99,10 +101,7 @@ function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
 }
 
 // Decide if discount is within desired margin and build the node if needed.
-// Filters out categories not present in the `category` array.
-function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
-    if (!categoriesWithDiscounts.includes(category)) return
-
+function handleDiscount(marketPrice, currentPrice, desiredMinPercentage) {
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
 
     let discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
@@ -139,7 +138,8 @@ async function listenForChanges() {
     await requireElement(".ReactVirtualized__Grid__innerScrollContainer", 20) // 5s
 
     let pricesTable = await getPricesTable()
-    // TODO handle case where this fails
+
+    let categorySettings = await getCategorySettings()
 
     let list = document.querySelector(".ReactVirtualized__Grid__innerScrollContainer")
 
@@ -152,16 +152,19 @@ async function listenForChanges() {
             // item removed (out of stock)
             // doing so forces the items below to fill the now empty space and requires
             // a full page refresh
-            if (mutation.removedNodes.length === 1 && mutation.removedNodes[0].classList.contains("item___CAjnz")) {
+            if (mutation.removedNodes.length === 1 && mutation.removedNodes[0].classList && mutation.removedNodes[0].classList.contains("item___CAjnz")) {
                 // console.log("[TM+] item removed, updating highlights")
 
                 // process all items in the page
                 showHighlight()
-            } else if (mutation.addedNodes.length == 1 && mutation.addedNodes[0].classList.contains("row___nCKu7")) {
+
+            // TODO handle case where a node is added with class=itemDescription___AsJM4 and parent with class=item___CAjnz
+            // This happens when the buy menu is closed
+            } else if (mutation.addedNodes.length == 1 && mutation.addedNodes[0].classList && mutation.addedNodes[0].classList.contains("row___nCKu7")) {
                 // new row of items loaded
                 
                 // console.log("[TM+] handling new row of items")
-                handleNewRow(pricesTable, mutation.addedNodes[0])
+                handleNewRow(pricesTable, categorySettings, mutation.addedNodes[0])
             }
         }
     }
@@ -171,7 +174,7 @@ async function listenForChanges() {
 // need to be handled differently than just processing every item on the page.
 // Doing so also reduces the amount of work that has to be done compared to
 // processing the entire page every time new items are loaded.
-async function handleNewRow(pricesTable, newRow) {
+async function handleNewRow(pricesTable, categorySettings, newRow) {
     let desiredMinProfit = await getMinProfit()
     let desiredMinPercentage = await getMinPercentage()
     let desiredMinPiggyBank = await getMinPiggyBankValue()
@@ -196,23 +199,27 @@ async function handleNewRow(pricesTable, newRow) {
         // item fetched from Torn API
         let apiItem = pricesTable.get(itemID)
 
-        let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
-        if (profitElement) {
-            item.classList.add("tmm-highlight")
+        if (categorySettings.get(apiItem.category).shop) {
+            let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
+            if (profitElement) {
+                item.classList.add("tmm-highlight")
 
-            let priceElement = item.querySelector(":scope > div .price___zTGNJ")
-            priceElement.classList.add("tmm-flex-with-space")
-            priceElement.appendChild(profitElement)
+                let priceElement = item.querySelector(":scope > div .price___zTGNJ")
+                priceElement.classList.add("tmm-flex-with-space")
+                priceElement.appendChild(profitElement)
+            }
         }
 
-        let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, "category", desiredMinPercentage)
-        if (discountElement) {
-            let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
-            wrapper.appendChild(discountElement)
+        if (categorySettings.get(apiItem.category).sale) {
+            let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, desiredMinPercentage)
+            if (discountElement) {
+                let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
+                wrapper.appendChild(discountElement)
+            }
         }
 
         let piggyBankElement = handlePiggyBank(apiItem.price, currentPrice, desiredMinPiggyBank, desiredMaxPiggyBankExpense)
-        if (piggyBankElement && !profitElement) {
+        if (piggyBankElement && typeof profitElement === 'undefined') { // mutual exclusive
             let wrapper = item.querySelector(":scope .imgContainer___xJNhu")
             wrapper.appendChild(piggyBankElement)
         }
