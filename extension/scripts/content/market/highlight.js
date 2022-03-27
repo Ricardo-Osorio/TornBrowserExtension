@@ -1,11 +1,5 @@
 "use strict"
 
-// categories (from the market left side panel) where discount percentages will be shown
-let categoriesWithDiscounts = ["medical-items", "temporary-items", "energy-drinks", "candy", "drugs", "enhancers", "alcohol", "flowers", "clothing", "plushies", "special-items"]
-
-// categories (from the market left side panel) where reselling profit will be shown
-let categoriesWithResellingProfit = ["flowers", "plushies"]
-
 window.addEventListener("refresh-market-highlight", showHighlight)
 
 showHighlight()
@@ -33,11 +27,10 @@ async function showHighlight() {
     }
 
     let pricesTable = await getPricesTable()
-    // TODO handle case where this fails
+
+    let categorySettings = await getCategorySettings()
 
     await requireElement(".item-market-wrap div[aria-expanded='true'] li[data-item]", 20) // 5s
-
-    let category = document.querySelector("[data-cat][aria-selected='true']").getAttribute("data-cat")
 
     for (let item of document.querySelectorAll(".item-market-wrap div[aria-expanded='true'] li[data-item]")) {
         const itemID = item.children[0].getAttribute("itemid")
@@ -60,28 +53,34 @@ async function showHighlight() {
         let wrapperElement = document.createElement("div")
         wrapperElement.classList.add("tmm-wrapper")
 
-        let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
-        if (profitElement) {
-            wrapperElement.appendChild(profitElement)
-            titleElement.classList.add("tmm-title-adjust")
-            titleElement.appendChild(wrapperElement)
+        if (categorySettings.get(apiItem.category).shop) {
+            let profitElement = handleProfit(apiItem.price, currentPrice, desiredMinProfit)
+            if (profitElement) {
+                wrapperElement.appendChild(profitElement)
+                titleElement.classList.add("tmm-title-adjust")
+                titleElement.appendChild(wrapperElement)
+            }
         }
 
-        let resellElement = handleProfitResell(apiItem.marketPrice, currentPrice, category)
-        if (resellElement) {
-            wrapperElement.appendChild(resellElement)
-            titleElement.classList.add("tmm-title-adjust")
-            titleElement.appendChild(wrapperElement)
+        if (categorySettings.get(apiItem.category).market) {
+            let resellElement = handleProfitResell(apiItem.marketPrice, currentPrice)
+            if (resellElement) {
+                wrapperElement.appendChild(resellElement)
+                titleElement.classList.add("tmm-title-adjust")
+                titleElement.appendChild(wrapperElement)
+            }
         }
 
-        let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, category, desiredMinPercentage)
-        if (discountElement) {
-            let wrapper = item.querySelector(":scope .qty-wrap")
-            wrapper.appendChild(discountElement)
+        if (categorySettings.get(apiItem.category).sale) {
+            let discountElement = handleDiscount(apiItem.marketPrice, currentPrice, desiredMinPercentage)
+            if (discountElement) {
+                let wrapper = item.querySelector(":scope .qty-wrap")
+                wrapper.appendChild(discountElement)
+            }
         }
 
         let piggyBankElement = handlePiggyBank(apiItem.price, currentPrice, desiredMinPiggyBank, desiredMaxPiggyBankExpense)
-        if (piggyBankElement && !profitElement) {
+        if (piggyBankElement && typeof profitElement === 'undefined') { // mutual exclusive
             let wrapper = item.querySelector(":scope .qty-wrap")
             wrapper.appendChild(piggyBankElement)
         }
@@ -109,11 +108,9 @@ function handleProfit(sellingPrice, currentPrice, desiredMinProfit) {
 }
 
 // TODO value gain from selling at current market price
-function handleProfitResell(marketPrice, currentPrice, category) {
-    // console.log(`[TM+] handleProfitResell: ${marketPrice}, ${currentPrice}, ${category}`)
+function handleProfitResell(marketPrice, currentPrice) {
+    // console.log(`[TM+] handleProfitResell: ${marketPrice}, ${currentPrice}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Pillow"
-
-    if (!categoriesWithResellingProfit.includes(category)) return
 
     let profit = marketPrice - currentPrice
     if (profit < defaultMinProfitResell) return
@@ -130,12 +127,9 @@ function handleProfitResell(marketPrice, currentPrice, category) {
 }
 
 // Decide if discount is within desired margin and build the node if needed.
-// Filters out categories not present in the `category` array.
-function handleDiscount(marketPrice, currentPrice, category, desiredMinPercentage) {
+function handleDiscount(marketPrice, currentPrice, desiredMinPercentage) {
     // console.log(`[TM+] handleDiscount: ${marketPrice}, ${currentPrice}, ${category}, ${desiredMinPercentage}`)
     if (!marketPrice) return // a few items don't have one, I.G. "Cleaver"
-
-    if (!categoriesWithDiscounts.includes(category)) return
     
     let discountPercentage = 100 - Math.round(currentPrice * 100 / marketPrice)
     if (discountPercentage < desiredMinPercentage) return

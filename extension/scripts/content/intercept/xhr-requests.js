@@ -5,7 +5,8 @@
 
 	window.XMLHttpRequest.prototype.open = function (method, url) {
 		this.addEventListener("readystatechange", function () {
-			if (method === 'POST' && this.readyState > 3 && this.status === 200) {
+			if (method === 'POST' && this.readyState > 3 && this.status === 200 && this.requestBody) {
+				
 				// listing page, update item:
 				// this.requestBody = step=changePrice&ID=146866501&price=551
 				// ID is not of the item but the listing itself

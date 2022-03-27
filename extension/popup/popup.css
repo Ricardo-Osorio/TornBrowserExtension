@@ -5,7 +5,6 @@
 .input-small {
   max-width: 30px;
 }
-
 .input-normal {
   max-width: 100px;
 }
@@ -14,18 +13,64 @@
   padding: 5px;
 }
 
-.text-align-center {
+.update-buttons {
+  text-align: center;
+  margin: 5px;
+}
+
+.align-center {
   text-align: center;
 }
 
+/* Hide input arrows */
 /* Chrome */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* collapsible elements */
+.collapsible {
+  background-color: #eee;
+  color: rgb(44, 44, 44);
+  cursor: pointer;
+  padding: 2px 5px;
+  width: 100%;
+  border: 2px solid #838383;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin-top: 2px;
+}
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+.content {
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  margin-bottom: 2px;
+  border: 1px solid #525252;
+}
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Table */
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
 }
